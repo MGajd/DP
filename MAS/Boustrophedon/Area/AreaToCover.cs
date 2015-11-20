@@ -4,14 +4,13 @@ using Boustrophedon.Boustrophedon;
 
 namespace Boustrophedon.Area
 {
-    class AreaToCover
+    public class AreaToCover
     {
 
         private List<AreaObjects.Coordinates> _coordinateList;
         private List<AreaObjects.Obstacle> _obstaclesList;
 
         private bool _allObstaclesKnown = true;
-
         private int _shape;
 
         /// <summary>
@@ -25,9 +24,7 @@ namespace Boustrophedon.Area
             CoordinateList.Add(new AreaObjects.Coordinates(0,0));
             CoordinateList.Add(coordinate);
 
-            Shape = (int)Boustrophedon.Enumerations.Shape.rectangle;
-
-
+            Shape = (int)Enumerations.Shape.rectangle;
         }
 
         public bool AddObstacle(AreaObjects.Obstacle obstacle) {

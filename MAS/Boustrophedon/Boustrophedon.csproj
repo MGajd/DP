@@ -55,10 +55,12 @@
     <Compile Include="Area\AreaObjects.cs" />
     <Compile Include="Area\AreaToCover.cs" />
     <Compile Include="Cover\CoverObject.cs" />
+    <Compile Include="Cover\CoverStrategy.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="Machine\MachineObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorldToCover\World.cs" />
     <EmbeddedResource Include="BoustrophedonForm.resx">
       <DependentUpon>BoustrophedonForm.cs</DependentUpon>
     </EmbeddedResource>

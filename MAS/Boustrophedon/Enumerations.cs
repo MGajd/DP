@@ -8,5 +8,16 @@ namespace Boustrophedon.Boustrophedon
 {
     class Enumerations
     {
+        public enum Shape
+        {
+            square = 1,
+            rectangle  = 2,
+            triamgle = 3,
+
+
+
+            polygon = 10
+            
+        }
     }
 }

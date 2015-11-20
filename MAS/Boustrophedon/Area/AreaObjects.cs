@@ -73,7 +73,7 @@ namespace Boustrophedon.AreaObjects
     public class Obstacle {
 
         private List<Coordinates> _obstacleCoordinatesList;
-
+        private int _shape;
 
         /// <summary>
         /// Define rectangular obstacle coordinates.
@@ -102,6 +102,38 @@ namespace Boustrophedon.AreaObjects
             }
         }
 
+        public int Shape
+        {
+            get
+            {
+                return _shape;
+            }
+
+            set
+            {
+                _shape = value;
+            }
+        }
+    }
+
+    public class CoveredSubArea {
+
+        //TODO: critical - implement constructors
+
+        /// <summary>
+        /// Use when straight width is covered.
+        /// </summary>
+        /// <param name="start">Starting coordinates (middle of the machine)</param>
+        /// <param name="end">Ending coordniates (middle of the machine)</param>
+        /// <param name="width">Width of covered strip</param>
+        public CoveredSubArea(Coordinates start, Coordinates end, decimal width)
+        {
+            
+        }
+
+        public CoveredSubArea(Coordinates cord1, Coordinates cord2) {
+
+        }
 
     }
 
