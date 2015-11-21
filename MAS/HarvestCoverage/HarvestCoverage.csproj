@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E1C56215-C705-43B8-9DCF-C66ECE012E84}</ProjectGuid>
+    <ProjectGuid>{9803692E-519F-422B-A441-C9EC2AA23A3B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Boustrophedon</RootNamespace>
-    <AssemblyName>Boustrophedon</AssemblyName>
+    <RootNamespace>HarvestCoverage</RootNamespace>
+    <AssemblyName>HarvestCoverage</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -46,25 +46,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BoustrophedonForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BoustrophedonForm.Designer.cs">
-      <DependentUpon>BoustrophedonForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Area\AreaObjects.cs" />
     <Compile Include="Area\AreaToCover.cs" />
     <Compile Include="Cover\CoverObject.cs" />
     <Compile Include="Cover\CoverStrategy.cs" />
     <Compile Include="Cover\DoCover.cs" />
-    <Compile Include="Enumerations.cs" />
+    <Compile Include="HarvestCoverageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HarvestCoverageForm.Designer.cs">
+      <DependentUpon>HarvestCoverageForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Machine\MachineObject.cs" />
     <Compile Include="Machine\Machines.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WorldToCover\World.cs" />
-    <EmbeddedResource Include="BoustrophedonForm.resx">
-      <DependentUpon>BoustrophedonForm.cs</DependentUpon>
+    <EmbeddedResource Include="HarvestCoverageForm.resx">
+      <DependentUpon>HarvestCoverageForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -88,7 +87,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Boustrophedon\Boustrophedon.csproj">
+      <Project>{e1c56215-c705-43b8-9dcf-c66ece012e84}</Project>
+      <Name>Boustrophedon</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

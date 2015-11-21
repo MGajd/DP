@@ -13,11 +13,11 @@ namespace Boustrophedon.AreaObjects
         private int _x;
         private int _y;
 
-        private Point _point;
+        private PointF _point;
 
 
         /// <summary>
-        /// Creates a nev point onf the Area
+        /// Creates a new point on the Area
         /// </summary>
         /// <param name="x">coordinate x</param>
         /// <param name="y">coordinate y</param>
@@ -25,7 +25,7 @@ namespace Boustrophedon.AreaObjects
             X = x;
             Y = y;
 
-            Point = new Point(x, y);
+            Point = new PointF(x, y);
         }
 
         public int X
@@ -54,7 +54,7 @@ namespace Boustrophedon.AreaObjects
             }
         }
 
-        public Point Point
+        public PointF Point
         {
             get
             {
@@ -135,6 +135,48 @@ namespace Boustrophedon.AreaObjects
 
         }
 
+        public CoveredSubArea(string coverLineID)
+        {
+
+        }
+
+        public CoveredSubArea(CoverLine coverLineObject)
+        {
+
+        }
+
+    }
+
+    public class CoverLine {
+
+        public bool IsDivide = false;
+        public Coordinates StartingCoordinates;
+        public Coordinates EndingCoordinates;
+        public string CoverLineID;
+        public string MachineID;
+        public string AreaToCoverID;
+
+        public string Status;
+
+
+        /// <summary>
+        /// Creates new line by copying system info of ol CoverLine. Use when adding the same value to both coordinates.
+        /// </summary>
+        /// <param name="_oldCoverLine">CovwrLine to create new one.</param>
+        /// <param name="xCoordinateAdd">Add value to x coordinate.</param>
+        /// <param name="yCoordinateAdd">Add value to y coordinate.</param>
+        public CoverLine(CoverLine _oldCoverLine, int xCoordinateAdd, int yCoordinateAdd,bool isDivide = false, string areaToCoverID = null)
+        {
+            StartingCoordinates = new Coordinates(_oldCoverLine.EndingCoordinates.X + xCoordinateAdd, _oldCoverLine.EndingCoordinates.Y + yCoordinateAdd);
+            EndingCoordinates = new Coordinates(_oldCoverLine.StartingCoordinates.X + xCoordinateAdd, _oldCoverLine.StartingCoordinates.Y + yCoordinateAdd);
+
+            this.IsDivide = isDivide;
+            this.AreaToCoverID = areaToCoverID ?? _oldCoverLine.AreaToCoverID;
+            this.MachineID = _oldCoverLine.MachineID;
+            this.Status = Enumerations.CoverLineStatus.reserved.ToString();
+
+
+        }
     }
 
 }

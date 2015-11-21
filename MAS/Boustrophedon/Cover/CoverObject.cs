@@ -11,12 +11,16 @@ using System.Drawing;
 
 namespace Boustrophedon.Cover
 {
-    class CoverObject
+    public partial class CoverObject
     {
         private Coordinates _machinePosition;
         private AreaToCover _coverArea;
-        private MachineObject _machine;
+        private MachineObject _machineObject;
         private Coordinates _direction;
+
+
+        private CoverLine _oldCoverLine;
+        private CoverLine _newCoverLine;
 
 
         public CoverObject() { }
@@ -24,7 +28,7 @@ namespace Boustrophedon.Cover
         public CoverObject(AreaToCover coverArea, MachineObject machine, Coordinates machinePosition, Coordinates direction)
         {
             CoverArea = coverArea;
-            Machine = machine;
+            MachineObject = machine;
             MachinePosition = machinePosition;
             Direction = direction;
         }
@@ -55,16 +59,16 @@ namespace Boustrophedon.Cover
             }
         }
 
-        public MachineObject Machine
+        public MachineObject MachineObject
         {
             get
             {
-                return _machine;
+                return _machineObject;
             }
 
             set
             {
-                _machine = value;
+                _machineObject = value;
             }
         }
 

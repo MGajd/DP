@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Boustrophedon.Boustrophedon
+namespace Boustrophedon
 {
     class Enumerations
     {
@@ -12,11 +12,28 @@ namespace Boustrophedon.Boustrophedon
         {
             square = 1,
             rectangle  = 2,
-            triamgle = 3,
-
-
-
+            triangle = 3,
+            
             polygon = 10
+            
+        }
+
+        public enum CoverLineStatus
+        {
+            coverred = 1,
+            covering = 2,
+            reserved = 3,
+                       
+        }
+
+        /// <summary>
+        /// Machine can have orefered/restricted direction
+        /// </summary>
+        public enum CoverDirection
+        {
+            leftToRight = 1,
+            rightToLeft = -1,
+            both = 3
             
         }
     }

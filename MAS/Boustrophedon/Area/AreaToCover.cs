@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
-
-using Boustrophedon.Boustrophedon;
+using System.Drawing;
 
 namespace Boustrophedon.Area
 {
     public class AreaToCover
     {
+
+        public string ID;
+        public PointF[] Area;
+
 
         private List<AreaObjects.Coordinates> _coordinateList;
         private List<AreaObjects.Obstacle> _obstaclesList;
