@@ -36,5 +36,10 @@ namespace Boustrophedon
             both = 3
             
         }
+
+        public enum CoverLineDirection {
+            upToDown = 1,
+            downToUp=2
+        }
     }
 }

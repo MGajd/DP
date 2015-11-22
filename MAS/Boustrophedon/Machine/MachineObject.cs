@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Boustrophedon.AreaObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,8 @@ namespace Boustrophedon.Machine
     {
 
         public string ActualCoverLineID;
+        public string NextCoverLineID;
+
         public string MachineID;
         public decimal TransportSpeed;
         public decimal NonCoverSpeed;
@@ -142,6 +145,61 @@ namespace Boustrophedon.Machine
 
             if (WorldToCover.World.CoverageStarted)
                 WorldToCover.World.AddMachineToCover(this);
+        }
+
+        /// <summary>
+        /// Method that initiates the process of coverring for current machine
+        /// </summary>
+        /// <returns></returns>
+        internal string StartWork()
+        {
+
+
+        }
+
+        /// <summary>
+        /// Return CoverLine where machine starts its work
+        /// </summary>
+        /// <returns></returns>
+        public string GetFirstCoverLine()
+        {
+
+            if (WorldToCover.World.CoverageStarted && !DivideIsNecessary("1"))
+            {
+                switch (WorldToCover.World.CoverDirection)
+                {
+                    case (int) Enumerations.CoverDirection.leftToRight:
+                        return GetFirstCoverLineFromLeft(Enumerations.CoverLineDirection.upToDown);
+                        
+                    case (int)Enumerations.CoverDirection.rightToLeft:
+                        return GetFirstCoverLineFromRight(Enumerations.CoverLineDirection.upToDown);
+
+
+                    case (int)Enumerations.CoverDirection.both:
+                        throw new NotImplementedException();
+                        
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+            
+        }
+
+        private bool DivideIsNecessary(string v)
+        {
+        }
+
+        private string GetFirstCoverLineFromRight(Enumerations.CoverLineDirection upToDown)
+        {
+
+        }
+
+        private string GetFirstCoverLineFromLeft(Enumerations.CoverLineDirection upToDown)
+        {
+        }
+
+        private string DivideCoverArea(string CoverAreaID)
+        {
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Boustrophedon.WorldToCover
 {
     public static class World
     {
+        public static int CoverLineIDCounter = 0;
 
         public static bool AreaCovered = false;
         public static bool CoverageStarted = false;
@@ -24,7 +25,7 @@ namespace Boustrophedon.WorldToCover
         public static int GoAroundAreaTimes = 0;
         public static decimal GoAroundAreaWidth = 0;
 
-        public static int GoAroundObstaclesWidth = 0;
+        public static int GoAroundObstaclesTimes = 0;
         public static decimal GoAroundObstaclesWidth = 0;
 
 
@@ -98,8 +99,10 @@ namespace Boustrophedon.WorldToCover
                     throw new NotImplementedException();
                 }
                 else
-
-                    machineObject.GetNewCoverLine();
+                {
+                    machineObject.GetFirstCoverLine();
+                    return machineObject.StartWork();
+                }
 
             }
             else
