@@ -214,4 +214,4 @@ ModelManifest.xml
 
 # custom 
 /MAS/Boustrophedon/bin/*
-/HarvestCoverage/Boustrophedon/bin/*
+/MAS/HarvestCoverage/bin/*
