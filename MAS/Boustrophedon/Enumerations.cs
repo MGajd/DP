@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Boustrophedon
 {
-    class Enumerations
+    public class Enumerations
     {
         public enum Shape
         {
@@ -40,6 +40,41 @@ namespace Boustrophedon
         public enum CoverLineDirection {
             upToDown = 1,
             downToUp=2
+        }
+
+
+        /// <summary>
+        /// Defines the position of the vehicle to the CoverArea
+        /// </summary>
+        /// 
+        ///  4         |         3
+        ///     -------|-------
+        ///     |      |      |  
+        /// ------ CoverArea -------
+        ///     |      |      |  
+        ///     -------|-------
+        ///  1         |         2
+        ///
+
+
+        public enum MachinePositionToCoverArea{
+            leftDown = 1,
+            rightDown = 2,
+            rightUp = 3,
+            LeftUp = 4,
+
+        }
+
+        public enum HorizontalPosition
+        {
+            left,
+            right,
+        }
+
+        public enum VerticalPosition
+        {
+            up,
+            down,
         }
     }
 }

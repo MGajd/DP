@@ -28,6 +28,14 @@ namespace Boustrophedon.AreaObjects
             Point = new PointF(x, y);
         }
 
+        public Coordinates(decimal x, decimal y)
+        {
+            X = (int) x;
+            Y = (int)y;
+
+            Point = new PointF((int)x, (int)y);
+        }
+
         public int X
         {
             get
@@ -156,11 +164,13 @@ namespace Boustrophedon.AreaObjects
         public string MachineID;
         public string AreaToCoverID;
 
-        public string Status;
+        public Enumerations.CoverLineStatus Status;
 
+
+        public CoverLine() { }
 
         /// <summary>
-        /// Creates new line by copying system info of ol CoverLine. Use when adding the same value to both coordinates.
+        /// Creates new line by copying system info of old CoverLine. Use when adding the same value to both coordinates.
         /// </summary>
         /// <param name="_oldCoverLine">CovwrLine to create new one.</param>
         /// <param name="xCoordinateAdd">Add value to x coordinate.</param>
@@ -173,9 +183,16 @@ namespace Boustrophedon.AreaObjects
             this.IsDivide = isDivide;
             this.AreaToCoverID = areaToCoverID ?? _oldCoverLine.AreaToCoverID;
             this.MachineID = _oldCoverLine.MachineID;
-            this.Status = Enumerations.CoverLineStatus.reserved.ToString();
+            this.Status = Enumerations.CoverLineStatus.reserved;
 
 
+        }
+
+        internal void ReverseCoordinates()
+        {
+            Coordinates tempCoordinates = StartingCoordinates;
+            StartingCoordinates = EndingCoordinates;
+            EndingCoordinates = tempCoordinates;
         }
     }
 

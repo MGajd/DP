@@ -25,9 +25,9 @@ namespace Boustrophedon.Cover
 
              }
             int coverDirectionCoefficient;
-                if (WorldToCover.World.CoverDirection == (int)Enumerations.CoverDirection.leftToRight)
+                if (WorldToCover.World.CoverDirection == Enumerations.CoverDirection.leftToRight)
                     coverDirectionCoefficient = 1;
-                else if (WorldToCover.World.CoverDirection == (int)Enumerations.CoverDirection.rightToLeft)
+                else if (WorldToCover.World.CoverDirection == Enumerations.CoverDirection.rightToLeft)
                     coverDirectionCoefficient = -1;
                 else
                     coverDirectionCoefficient = 0;

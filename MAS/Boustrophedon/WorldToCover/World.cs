@@ -17,7 +17,7 @@ namespace Boustrophedon.WorldToCover
         public static bool AreaCovered = false;
         public static bool CoverageStarted = false;
 
-        public static int CoverDirection = (int)Enumerations.CoverDirection.both;
+        public static Enumerations.CoverDirection CoverDirection = Enumerations.CoverDirection.leftToRight;
 
         public static bool GoAroundAreaToCover = false;
         public static bool GoAroundObstacles = false;
@@ -42,33 +42,14 @@ namespace Boustrophedon.WorldToCover
         }
 
 
-
-        /// <summary>
-        /// C# code snippet to determine if a point is in a polygon
-        /// http://dominoc925.blogspot.sk/2012/02/c-code-snippet-to-determine-if-point-is.html
-        /// 15.11.2015
-        /// </summary>
-        /// <param name="polygon"></param>
-        /// <param name="point"></param>
-        /// <returns></returns>
-        private static bool IsPointInPolygon(PointF[] polygon, PointF point)
-        {
-            bool isInside = false;
-            for (int i = 0, j = polygon.Length - 1; i < polygon.Length; j = i++)
-            {
-                if (((polygon[i].Y > point.Y) != (polygon[j].Y > point.Y)) &&
-                (point.X < (polygon[j].X - polygon[i].X) * (point.Y - polygon[i].Y) / (polygon[j].Y - polygon[i].Y) + polygon[i].X))
-                {
-                    isInside = !isInside;
-                }
-            }
-            return isInside;
-        }
-
-
         public static CoverLine GetLine(string ID)
         {
             return CoverLinesList.Where(a => a.AreaToCoverID == ID).First();
+        }
+
+        public static void AddCoverLine(CoverLine newCoverLine, decimal width)
+        {
+
         }
 
 
@@ -78,7 +59,7 @@ namespace Boustrophedon.WorldToCover
         public static string StartCover()
         {
             StringBuilder result = new StringBuilder(); 
-            foreach (var machine in Machines.MachineList)
+            foreach (var machine in Machines.MachineList.OrderByDescending(a => a.CoverSpeed))
             {
                 if (!AreaCovered)
                     result.AppendLine(AddMachineToCover(machine));
@@ -100,20 +81,27 @@ namespace Boustrophedon.WorldToCover
                 }
                 else
                 {
-                    machineObject.GetFirstCoverLine();
+                    //TODO:major - divide machines into groups
+                    machineObject.GetFirstCoverLine("1");
                     return machineObject.StartWork();
+
                 }
 
             }
             else
             {
                 AreaCovered = true;
-                return "NOTHING TO COVER / AREA FULLY COVERED";
+                return "NOTHING TO COVER / AREA (ALREADY) FULLY COVERED";
             }
                 
 
             
 
+        }
+
+        internal static AreaToCover GetAreaByID(string areaToCoverID)
+        {
+            return AreaToCover.Where(a => a.AreaToCoverID == areaToCoverID).First();
         }
     }
 }
