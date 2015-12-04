@@ -31,9 +31,10 @@ namespace Boustrophedon.WorldToCover
 
 
 
-        public static List<AreaToCover> AreaToCover;
+        public static List<AreaToCover> AreasToCover;
         public static List<CoveredSubArea> CoveredSubAreaList;
         public static List<CoverLine> CoverLinesList;
+
 
         public static void AddCoveredSubArea(CoveredSubArea subArea)
         {
@@ -42,14 +43,14 @@ namespace Boustrophedon.WorldToCover
         }
 
 
-        public static CoverLine GetLine(string ID)
+        public static CoverLine GetCoverLine(string coverLineID)
         {
-            return CoverLinesList.Where(a => a.AreaToCoverID == ID).First();
+            return CoverLinesList.Where(a => a.AreaToCoverID == coverLineID).First();
         }
 
         public static void AddCoverLine(CoverLine newCoverLine, decimal width)
         {
-
+            //TODO:blocker - AddCoverLine
         }
 
 
@@ -72,7 +73,7 @@ namespace Boustrophedon.WorldToCover
         {
 
 
-            if (AreaToCover != null && AreaToCover.Count > 0)
+            if (AreasToCover != null && AreasToCover.Count > 0)
             {
                 if (GoAroundAreaTimes != 0)
                 {
@@ -101,7 +102,34 @@ namespace Boustrophedon.WorldToCover
 
         internal static AreaToCover GetAreaByID(string areaToCoverID)
         {
-            return AreaToCover.Where(a => a.AreaToCoverID == areaToCoverID).First();
+            return AreasToCover.Where(a => a.AreaToCoverID == areaToCoverID).First();
+        }
+
+
+        /// <summary>
+        /// Get machines working on the same area
+        /// </summary>
+        /// <param name="coverAreaID"></param>
+        /// <returns></returns>
+        internal static List<string> GetMachinesToBeOnTheSameCoverArea(string coverAreaID)
+        {
+            //TODO:major - optimalization
+            return Machines.MachineList.Select(a => a.MachineID).ToList();
+        }
+
+        internal static AreaToCover GetAreaToCoverByCoverLineID(string coverLineID)
+        {
+            string areaToCoverID = CoverLinesList.Where(a => a.CoverLineID == coverLineID).FirstOrDefault().AreaToCoverID;
+            if (areaToCoverID != null)
+                return (AreasToCover.Where(a => a.AreaToCoverID == areaToCoverID)).FirstOrDefault();
+            else
+                //TODO:major - if null
+                throw new NotImplementedException();
+        }
+
+        internal static bool AreaExists(string areaToCoverID)
+        {
+            return AreasToCover.Where(a => a.AreaToCoverID == areaToCoverID).Count() > 0;
         }
     }
 }

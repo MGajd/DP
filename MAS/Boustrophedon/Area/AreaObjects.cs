@@ -160,6 +160,8 @@ namespace Boustrophedon.AreaObjects
         public bool IsDivide = false;
         public Coordinates StartingCoordinates;
         public Coordinates EndingCoordinates;
+        public Enumerations.CoverLinePosition CoverLinePosition;
+
         public string CoverLineID;
         public string MachineID;
         public string AreaToCoverID;

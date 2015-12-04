@@ -295,11 +295,42 @@ namespace Boustrophedon.Area
             return coverLine;
         }
 
-        private CoverLine GetFirstLineFromLeft(decimal width, bool reverseDirection = false)
+        private CoverLine GetFirstLineFromLeft(decimal workingWidth, bool reverseDirection = false)
         {
             CoverLine coverLine = new CoverLine();
-            coverLine.StartingCoordinates = new Coordinates(LeftDown.X + width / 2, LeftDown.Y);
-            coverLine.EndingCoordinates = new Coordinates(LeftUp.X + width / 2, LeftUp.Y);
+            coverLine.StartingCoordinates = new Coordinates(LeftDown.X + workingWidth / 2, LeftDown.Y);
+            coverLine.EndingCoordinates = new Coordinates(LeftUp.X + workingWidth / 2, LeftUp.Y);
+
+            coverLine.Status = Enumerations.CoverLineStatus.reserved;
+            coverLine.IsDivide = false;
+            coverLine.CoverLineID = World.CoverLineIDCounter++.ToString();
+
+            if (reverseDirection)
+                coverLine.ReverseCoordinates();
+            return coverLine;
+        }
+
+        public CoverLine GetLineFromLeft(decimal width, decimal workingWidth, bool reverseDirection = false)
+        {
+            CoverLine coverLine = new CoverLine();
+            coverLine.EndingCoordinates = new Coordinates(LeftDown.X + workingWidth + width / 2, LeftDown.Y);
+            coverLine.StartingCoordinates = new Coordinates(LeftUp.X + workingWidth + width/ 2, LeftUp.Y);
+
+            coverLine.Status = Enumerations.CoverLineStatus.reserved;
+            coverLine.IsDivide = false;
+            coverLine.CoverLineID = World.CoverLineIDCounter++.ToString();
+
+            if (reverseDirection)
+                coverLine.ReverseCoordinates();
+            return coverLine;
+
+        }
+
+        public CoverLine GetLineFromRight(decimal width, decimal workingWidth, bool reverseDirection = false)
+        {
+            CoverLine coverLine = new CoverLine();
+            coverLine.StartingCoordinates = new Coordinates(RightDown.X - width / 2, RightDown.Y);
+            coverLine.EndingCoordinates = new Coordinates(RightUp.X - width / 2, RightUp.Y);
 
             coverLine.Status = Enumerations.CoverLineStatus.reserved;
             coverLine.IsDivide = false;

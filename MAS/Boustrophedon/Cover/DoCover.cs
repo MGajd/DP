@@ -17,7 +17,7 @@ namespace Boustrophedon.Cover
         {
 
 
-            _oldCoverLine = WorldToCover.World.GetLine(oldCoverLineID);
+            _oldCoverLine = WorldToCover.World.GetCoverLine(oldCoverLineID);
             _machineObject = machineObject;
 
             if (_oldCoverLine.IsDivide)
@@ -78,7 +78,7 @@ namespace Boustrophedon.Cover
         {
             if (_oldCoverLine.IsDivide)
             {
-                newLine = new CoverLine(_oldCoverLine, (int)MachineObject.Width, 0);
+                newLine = new CoverLine(_oldCoverLine, (int)MachineObject.WorkingWidth, 0);
             }
             else
             throw new NotImplementedException();
@@ -88,7 +88,7 @@ namespace Boustrophedon.Cover
         {
             if (_oldCoverLine.IsDivide)
             {
-                newLine = new CoverLine(_oldCoverLine, (int)MachineObject.Width * -1, 0);
+                newLine = new CoverLine(_oldCoverLine, (int)MachineObject.WorkingWidth * -1, 0);
             }
             else
                 throw new NotImplementedException();
@@ -98,7 +98,7 @@ namespace Boustrophedon.Cover
         {
             if (_oldCoverLine.IsDivide)
             {
-                newLine = new CoverLine(_oldCoverLine, (int)MachineObject.Width * -1, 0);
+                newLine = new CoverLine(_oldCoverLine, (int)MachineObject.WorkingWidth * -1, 0);
             }
             else
                 throw new NotImplementedException();
@@ -108,7 +108,7 @@ namespace Boustrophedon.Cover
         {
             if (_oldCoverLine.IsDivide)
             {
-                newLine = new CoverLine(_oldCoverLine, (int)MachineObject.Width, 0);
+                newLine = new CoverLine(_oldCoverLine, (int)MachineObject.WorkingWidth, 0);
             }
             else
                 throw new NotImplementedException();

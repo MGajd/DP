@@ -59,6 +59,7 @@
     <Compile Include="Cover\DoCover.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="Helpers\Methods.cs" />
+    <Compile Include="Machine\MachineHelpers.cs" />
     <Compile Include="Machine\MachineObject.cs" />
     <Compile Include="Machine\Machines.cs" />
     <Compile Include="Program.cs" />

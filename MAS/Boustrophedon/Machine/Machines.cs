@@ -11,12 +11,22 @@ namespace Boustrophedon.Machine
         public static List<MachineObject> MachineList;
         public static decimal TotalWorkingWidth;
 
+        internal static List<MachineObject> GetMachines(List<string> machinesIDs)
+        {
+            List<MachineObject> machinesByIds = new List<MachineObject>();
 
+            foreach (var id in machinesIDs)
+            {
+                machinesByIds.Add(MachineList.Where(a => a.MachineID == id).First());
+            }
+
+            return machinesByIds;
+        }
 
         public static void AddMachineToList(MachineObject machineObject)
         {
             MachineList.Add(machineObject);
-            TotalWorkingWidth += machineObject.Width;
+            TotalWorkingWidth += machineObject.WorkingWidth;
         }
 
 
@@ -27,7 +37,7 @@ namespace Boustrophedon.Machine
             {
                 if (machine.MachineID == machineObject.MachineID)
                 {
-                    TotalWorkingWidth -= machine.Width;
+                    TotalWorkingWidth -= machine.WorkingWidth;
                     break;
                 }
 

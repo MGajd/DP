@@ -76,5 +76,10 @@ namespace Boustrophedon
             up,
             down,
         }
+
+        public enum CoverLinePosition {
+            inner = 1,
+            outer = 2,
+        }
     }
 }
