@@ -17,7 +17,7 @@ namespace Boustrophedon.Cover
         {
 
 
-            _oldCoverLine = WorldToCover.World.GetCoverLine(oldCoverLineID);
+            _oldCoverLine = WorldToCover.World.GetCoverLineByID(oldCoverLineID);
             _machineObject = machineObject;
 
             if (_oldCoverLine.IsDivide)
@@ -66,13 +66,14 @@ namespace Boustrophedon.Cover
                 }
             }
 
+           // World.
+
             //TODO:blocker - add newLine to List<CoveredSubArea>
 
             return newLine;
         }
 
 
-        //TODO:blocker - implement every new line getting
 
         private void DownToUpLeftToRight(CoverLine _oldCoverLine, MachineObject _machineObject)
         {

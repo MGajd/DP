@@ -14,11 +14,11 @@ namespace Boustrophedon.Area
 
 
 
-        public int MinX
+        public decimal MinX
         {
             get
             {
-                int minX;
+                decimal minX;
                 minX = CoordinateList[0].X;
                 foreach (var item in CoordinateList)
                 {
@@ -29,11 +29,11 @@ namespace Boustrophedon.Area
             }
         }
 
-        public int MinY
+        public decimal MinY
         {
             get
             {
-                int minY;
+                decimal minY;
                 minY = CoordinateList[0].Y;
                 foreach (var item in CoordinateList)
                 {
@@ -44,11 +44,11 @@ namespace Boustrophedon.Area
             }
         }
 
-        public int MaxX
+        public decimal MaxX
         {
             get
             {
-                int maxX;
+                decimal maxX;
                 maxX = CoordinateList[0].X;
                 foreach (var item in CoordinateList)
                 {
@@ -59,11 +59,11 @@ namespace Boustrophedon.Area
             }
         }
 
-        public int MaxY
+        public decimal MaxY
         {
             get
             {
-                int maxY;
+                decimal maxY;
                 maxY = CoordinateList[0].Y;
                 foreach (var item in CoordinateList)
                 {
@@ -81,6 +81,20 @@ namespace Boustrophedon.Area
         private bool _allObstaclesKnown = true;
         private int _shape;
 
+        internal void MinusWidthFromRight(decimal width)
+        {
+            CoordinateList[1].X -= width;
+            CoordinateList[2].X -= width;
+        }
+
+        internal void MinusWidthFromLeft(decimal width)
+        {
+            CoordinateList[0].X += width;
+            CoordinateList[3].X += width;
+        }
+
+
+
         /// <summary>
         /// Use when area shape is rectange and starts at coordinates [0,0]
         /// </summary>
@@ -91,10 +105,24 @@ namespace Boustrophedon.Area
             CoordinateList = new List<Coordinates>();
 
             CoordinateList.Add(new Coordinates(0, 0));
+            CoordinateList.Add(new Coordinates(coordinate.X, 0));
             CoordinateList.Add(coordinate);
+            CoordinateList.Add(new Coordinates(0, coordinate.Y));
+
 
             Shape = (int)Enumerations.Shape.rectangle;
         }
+
+        public AreaToCover(AreaToCover area)
+        {
+            CoordinateList = new List<Coordinates>();
+
+            foreach (var coordinate in area.CoordinateList)
+            {
+                CoordinateList.Add(new Coordinates(coordinate.X, coordinate.Y));
+            }
+            AreaToCoverID = World.AreaToCoverIDCounter++.ToString();
+        } 
 
         public bool AddObstacle(Obstacle obstacle)
         {
@@ -169,7 +197,7 @@ namespace Boustrophedon.Area
             get
             {
                 var x = MinX;
-                int y = 0;
+                decimal y = 0;
                 bool found = false;
 
                 foreach (var item in CoordinateList)
@@ -188,7 +216,7 @@ namespace Boustrophedon.Area
             get
             {
                 var x = MinX;
-                int y = 0;
+                decimal y = 0;
                 bool found = false;
 
                 foreach (var item in CoordinateList)
@@ -207,7 +235,7 @@ namespace Boustrophedon.Area
             get
             {
                 var x = MaxX;
-                int y = 0;
+                decimal y = 0;
                 bool found = false;
 
                 foreach (var item in CoordinateList)
@@ -226,7 +254,7 @@ namespace Boustrophedon.Area
             get
             {
                 var x = MaxX;
-                int y = 0;
+                decimal y = 0;
                 bool found = false;
 
                 foreach (var item in CoordinateList)
@@ -280,11 +308,14 @@ namespace Boustrophedon.Area
                 throw new NotImplementedException();
         }
 
-        private CoverLine GetFirstLineFromRight(decimal width, bool reverseDirection = false)
+        private CoverLine GetFirstLineFromRight(decimal workingWidth, bool reverseDirection = false)
         {
+             int coef = 1;
+            if (reverseDirection)
+                coef = 1;
             CoverLine coverLine = new CoverLine();
-            coverLine.StartingCoordinates = new Coordinates(RightDown.X - width / 2, RightDown.Y);
-            coverLine.EndingCoordinates = new Coordinates(RightUp.X - width / 2, RightUp.Y);
+            coverLine.StartingCoordinates = new Coordinates(RightDown.X - (coef * workingWidth) / 2, RightDown.Y);
+            coverLine.EndingCoordinates = new Coordinates(RightUp.X - (coef * workingWidth) / 2, RightUp.Y);
 
             coverLine.Status = Enumerations.CoverLineStatus.reserved;
             coverLine.IsDivide = false;
@@ -297,9 +328,12 @@ namespace Boustrophedon.Area
 
         private CoverLine GetFirstLineFromLeft(decimal workingWidth, bool reverseDirection = false)
         {
+            int coef = 1;
+            if (reverseDirection)
+                coef = -1;
             CoverLine coverLine = new CoverLine();
-            coverLine.StartingCoordinates = new Coordinates(LeftDown.X + workingWidth / 2, LeftDown.Y);
-            coverLine.EndingCoordinates = new Coordinates(LeftUp.X + workingWidth / 2, LeftUp.Y);
+            coverLine.StartingCoordinates = new Coordinates(LeftDown.X + (coef * workingWidth) / 2, LeftDown.Y);
+            coverLine.EndingCoordinates = new Coordinates(LeftUp.X + (coef * workingWidth) / 2, LeftUp.Y);
 
             coverLine.Status = Enumerations.CoverLineStatus.reserved;
             coverLine.IsDivide = false;
@@ -311,10 +345,13 @@ namespace Boustrophedon.Area
         }
 
         public CoverLine GetLineFromLeft(decimal width, decimal workingWidth, bool reverseDirection = false)
-        {
+         {
+            int coef = 1;
+            if (reverseDirection)
+                coef = -1;
             CoverLine coverLine = new CoverLine();
-            coverLine.EndingCoordinates = new Coordinates(LeftDown.X + workingWidth + width / 2, LeftDown.Y);
-            coverLine.StartingCoordinates = new Coordinates(LeftUp.X + workingWidth + width/ 2, LeftUp.Y);
+            coverLine.EndingCoordinates = new Coordinates(LeftDown.X + width - workingWidth / 2, LeftDown.Y);
+            coverLine.StartingCoordinates = new Coordinates(LeftUp.X + width - workingWidth / 2, LeftUp.Y);
 
             coverLine.Status = Enumerations.CoverLineStatus.reserved;
             coverLine.IsDivide = false;
@@ -328,9 +365,12 @@ namespace Boustrophedon.Area
 
         public CoverLine GetLineFromRight(decimal width, decimal workingWidth, bool reverseDirection = false)
         {
+            int coef = 1;
+            if (reverseDirection)
+                coef = -1;
             CoverLine coverLine = new CoverLine();
-            coverLine.StartingCoordinates = new Coordinates(RightDown.X - width / 2, RightDown.Y);
-            coverLine.EndingCoordinates = new Coordinates(RightUp.X - width / 2, RightUp.Y);
+            coverLine.StartingCoordinates = new Coordinates(RightDown.X - width -(coef * workingWidth) / 2, RightDown.Y);
+            coverLine.EndingCoordinates = new Coordinates(RightUp.X - width -(coef * workingWidth) / 2, RightUp.Y);
 
             coverLine.Status = Enumerations.CoverLineStatus.reserved;
             coverLine.IsDivide = false;
@@ -340,5 +380,19 @@ namespace Boustrophedon.Area
                 coverLine.ReverseCoordinates();
             return coverLine;
         }
+
+        internal void SetAsDividedLeft(CoverLine coverLine, decimal workingWidth)
+        {
+            CoordinateList[1] = new Coordinates(coverLine.StartingCoordinates.X - workingWidth / 2, CoordinateList[1].Y);
+            CoordinateList[2] = new Coordinates(coverLine.EndingCoordinates.X - workingWidth / 2, CoordinateList[2].Y);
+        }
+
+        internal void SetAsDividedRight(CoverLine coverLine, decimal workingWidth)
+        {
+            CoordinateList[0] = new Coordinates(coverLine.StartingCoordinates.X + workingWidth / 2, CoordinateList[0].Y);
+            CoordinateList[3] = new Coordinates(coverLine.EndingCoordinates.X + workingWidth / 2, CoordinateList[3].Y);
+        }
+
+
     }
 }

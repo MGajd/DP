@@ -10,8 +10,8 @@ namespace Boustrophedon.AreaObjects
     public class Coordinates
     {
 
-        private int _x;
-        private int _y;
+        private decimal _x;
+        private decimal _y;
 
         private PointF _point;
 
@@ -30,13 +30,13 @@ namespace Boustrophedon.AreaObjects
 
         public Coordinates(decimal x, decimal y)
         {
-            X = (int) x;
-            Y = (int)y;
+            X = x;
+            Y = y;
 
             Point = new PointF((int)x, (int)y);
         }
 
-        public int X
+        public decimal X
         {
             get
             {
@@ -49,7 +49,7 @@ namespace Boustrophedon.AreaObjects
             }
         }
 
-        public int Y
+        public decimal Y
         {
             get
             {
@@ -195,6 +195,11 @@ namespace Boustrophedon.AreaObjects
             Coordinates tempCoordinates = StartingCoordinates;
             StartingCoordinates = EndingCoordinates;
             EndingCoordinates = tempCoordinates;
+        }
+
+        internal double GetCoveringTimeSeconds(decimal speed)
+        {
+            return (double)(Helpers.Methods.GetDistance(StartingCoordinates, EndingCoordinates)/ speed);
         }
     }
 

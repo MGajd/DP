@@ -16,5 +16,13 @@ namespace Boustrophedon.GUI
         {
             InitializeComponent();
         }
+
+        private void btStart_Click(object sender, EventArgs e)
+        {
+            new WorldToCover.Initialization();
+            rtbLog.AppendText("INITIALIZATION SUCCESFULL\n \n \n");
+
+            rtbLog.AppendText(WorldToCover.World.StartCover());
+        }
     }
 }

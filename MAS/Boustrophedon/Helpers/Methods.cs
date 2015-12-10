@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Boustrophedon.AreaObjects;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -29,6 +30,17 @@ namespace Boustrophedon.Helpers
                 }
             }
             return isInside;
+        }
+
+        public static decimal GetDistance(Coordinates point1, Coordinates point2)
+        {
+            decimal x = point1.X - point2.X;
+            decimal y = point1.Y - point2.Y;
+
+            var power = Math.Pow((double)x, 2) + Math.Pow((double)y, 2);
+
+            return Convert.ToDecimal(Math.Sqrt(power));
+
         }
     }
 }

@@ -8,6 +8,7 @@ namespace Boustrophedon.Machine
 {
     public static class Machines
     {
+        public static int machineIDCounter = 0;
         public static List<MachineObject> MachineList;
         public static decimal TotalWorkingWidth;
 
@@ -45,6 +46,11 @@ namespace Boustrophedon.Machine
             }
 
             MachineList.RemoveAt(index);
+        }
+
+        internal static MachineObject GetMachineByID(string machineID)
+        {
+            return MachineList.Where(a => a.MachineID == machineID).First();
         }
     }
 }

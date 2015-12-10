@@ -28,11 +28,12 @@ namespace Boustrophedon.Machine
                 case Enumerations.CoverDirection.leftToRight:
                     if (VerticalPosition == Enumerations.VerticalPosition.down)
                     {
-                        if (getDistance(position, WorldToCover.World.GetAreaByID(area1ID).LeftDown) - WorkingWidth/2 < getDistance(position, WorldToCover.World.GetAreaByID(area1ID).LeftDown) + WorkingWidth/2)
+                        if (Helpers.Methods.GetDistance(position, WorldToCover.World.GetAreaByID(area1ID).LeftDown) - WorkingWidth/2 < Helpers.Methods.GetDistance(position, WorldToCover.World.GetAreaByID(area2ID).LeftDown) + WorkingWidth/2)
                             return area1ID;
                         else
                             return area2ID;
                     }
+
                     break;
                 default:
                     //TODO:minor Implement othe cover direction decisionns
@@ -40,17 +41,5 @@ namespace Boustrophedon.Machine
             }
             return area1ID;      
         }
-
-        private decimal getDistance(Coordinates point1, Coordinates point2)
-        {
-            decimal x = point1.X - point2.X;
-            decimal y = point1.Y - point2.Y;
-
-            var power = Math.Pow((double)x, 2) + Math.Pow((double)y, 2);
-
-            return Convert.ToDecimal(Math.Sqrt(power));
-
-        }
-
     }
 }
