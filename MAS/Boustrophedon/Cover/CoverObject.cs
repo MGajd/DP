@@ -20,7 +20,7 @@ namespace Boustrophedon.Cover
 
 
         private CoverLine _oldCoverLine;
-        private CoverLine _newCoverLine;
+       // private CoverLine _newCoverLine;
 
 
         public CoverObject() { }

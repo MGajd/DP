@@ -54,17 +54,26 @@
     </Compile>
     <Compile Include="Area\AreaObjects.cs" />
     <Compile Include="Area\AreaToCover.cs" />
+    <Compile Include="Communication\Enum.cs" />
+    <Compile Include="Communication\Request.cs" />
+    <Compile Include="Communication\Response.cs" />
+    <Compile Include="Communication\ResponseObjects.cs" />
     <Compile Include="Cover\CoverObject.cs" />
     <Compile Include="Cover\CoverStrategy.cs" />
     <Compile Include="Cover\DoCover.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="Helpers\Methods.cs" />
+    <Compile Include="Machine\MachineCommunication.cs" />
     <Compile Include="Machine\MachineHelpers.cs" />
     <Compile Include="Machine\MachineObject.cs" />
     <Compile Include="Machine\Machines.cs" />
+    <Compile Include="Optimalizations\InMachineWay.cs" />
+    <Compile Include="Optimalizations\IOptimalization.cs" />
+    <Compile Include="Optimalizations\LastCoverLineOptimalization.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WorldToCover\Initialization.cs" />
+    <Compile Include="WorldToCover\Settings.cs" />
     <Compile Include="WorldToCover\World.cs" />
     <EmbeddedResource Include="BoustrophedonForm.resx">
       <DependentUpon>BoustrophedonForm.cs</DependentUpon>

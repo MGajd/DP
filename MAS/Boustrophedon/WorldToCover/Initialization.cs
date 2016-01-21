@@ -14,7 +14,7 @@ namespace Boustrophedon.WorldToCover
         public Initialization()
         {
             MachineObject machine = new MachineObject();
-            machine.CoverSpeed = (decimal)1.6;
+            machine.CoverSpeed = (decimal)1;
             machine.Position = new Coordinates(0, 0);
             machine.TransportSpeed = (decimal)3.33;
             machine.TurningRadius = (decimal)10;
@@ -22,8 +22,17 @@ namespace Boustrophedon.WorldToCover
 
             //Machines.AddMachineToList(machine);
 
+
             machine = new MachineObject();
             machine.CoverSpeed = (decimal)1.5;
+            machine.Position = new Coordinates(0, 0);
+            machine.TransportSpeed = (decimal)3.33;
+            machine.TurningRadius = (decimal)10;
+            machine.WorkingWidth = (decimal)6.6;
+
+
+            machine = new MachineObject();
+            machine.CoverSpeed = (decimal)1.8;
             machine.Position = new Coordinates(0, 0);
             machine.TransportSpeed = (decimal)3.33;
             machine.TurningRadius = (decimal)10;

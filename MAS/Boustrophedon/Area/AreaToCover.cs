@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Boustrophedon.AreaObjects;
 using Boustrophedon.WorldToCover;
+using Boustrophedon.Machine;
 
 namespace Boustrophedon.Area
 {
@@ -42,6 +43,46 @@ namespace Boustrophedon.Area
                 }
                 return minY;
             }
+        }
+
+        internal string GetLastCoverLine(Enumerations.VerticalPosition verticalPosition)
+        {
+            if (World.CoverDirection == Enumerations.CoverDirection.both)
+                throw new NotImplementedException();
+
+            else if ((verticalPosition == Enumerations.VerticalPosition.up && World.CoverDirection == Enumerations.CoverDirection.leftToRight)
+                || (verticalPosition == Enumerations.VerticalPosition.down && World.CoverDirection == Enumerations.CoverDirection.rightToLeft))
+            
+               return GetLastCoverLineFromRight();
+            
+            else
+                return GetLastCoverLineFromLeft();
+
+        }
+
+        private string GetLastCoverLineFromLeft()
+        {
+            return GetCoverLineForY(RightUp.X + 1);
+        }
+
+        private string GetLastCoverLineFromRight()
+        {
+            return GetCoverLineForY(RightUp.X + 1);
+        }
+
+        private string GetCoverLineForY(decimal x )
+        {
+            foreach (var machine in Machines.MachineList)
+            {
+                CoverLine coverLine = World.GetCoverLineByID(machine.ActualCoverLineID);
+                if (coverLine != null)
+                {
+                    //ak y patri do intervalu uurceneho pracovnou sirkou
+                    if (coverLine.StartingCoordinates.X + machine.WorkingWidth / 2 > x && coverLine.StartingCoordinates.X - machine.WorkingWidth / 2 < x)
+                        return coverLine.CoverLineID;
+                }
+            }
+                    return null;
         }
 
         public decimal MaxX
@@ -346,9 +387,9 @@ namespace Boustrophedon.Area
 
         public CoverLine GetLineFromLeft(decimal width, decimal workingWidth, bool reverseDirection = false)
          {
-            int coef = 1;
-            if (reverseDirection)
-                coef = -1;
+            //int coef = 1;
+            //if (reverseDirection)
+            //    coef = -1;
             CoverLine coverLine = new CoverLine();
             coverLine.EndingCoordinates = new Coordinates(LeftDown.X + width - workingWidth / 2, LeftDown.Y);
             coverLine.StartingCoordinates = new Coordinates(LeftUp.X + width - workingWidth / 2, LeftUp.Y);
@@ -393,6 +434,8 @@ namespace Boustrophedon.Area
             CoordinateList[3] = new Coordinates(coverLine.EndingCoordinates.X + workingWidth / 2, CoordinateList[3].Y);
         }
 
+
+        
 
     }
 }

@@ -265,13 +265,13 @@ namespace Boustrophedon.Machine
             return coverLine;
         }
 
-        private AreaToCover GetBestAreaToCoverIDForMachine(string machineID, Enumerations.MachinePositionToCoverArea machinePositionToCoverArea)
+        private AreaToCover GetBestAreaToCoverIDForMachine(string machineID, Enumerations.MachinePositionToCoverArea machinePositionToCoverArea, List<string> exceptionAreaIDsList = null )
         {
-
+            AreaToCover returnAreaToCover = null;
             if (!string.IsNullOrEmpty(ActualCoverLineID))
             {
-                CoverLine actualCoverLine = World.GetCoverLineByID(ActualCoverLineID);
-                string areaID = actualCoverLine.AreaToCoverID;
+                    CoverLine actualCoverLine = World.GetCoverLineByID(ActualCoverLineID);
+                    string areaID = actualCoverLine.AreaToCoverID;
 
                 switch (World.CoverDirection)
                 {
@@ -297,7 +297,7 @@ namespace Boustrophedon.Machine
                         throw new NotImplementedException();
                 }
 
-                return World.GetAreaByID(areaID);
+                returnAreaToCover = World.GetAreaByID(areaID);
             }
 
             //TODO:critical - left or right  
@@ -306,11 +306,27 @@ namespace Boustrophedon.Machine
             foreach (var area in orderedAreaToCoverList)
             {
                 if (area.IsHelpNeeded() && area.CanBeMachineAdded(machineID))
-                    return area;
+                    returnAreaToCover = area;
             }
 
-            return GetSlowestArea();
 
+            //speed optimalization
+            //whether there is not a machine that is slower, a will mind me or whether there is not machine going oposite me...
+            if (Settings.InMachineWayOptimalization)
+            {
+                if (Optimalizations.InMachineWay.IsInMyWay(this, returnAreaToCover))
+                {
+                    exceptionAreaIDsList = exceptionAreaIDsList ?? new List<string>();
+
+                    exceptionAreaIDsList.Add(returnAreaToCover.AreaToCoverID);
+                    returnAreaToCover = GetBestAreaToCoverIDForMachine(MachineID, machinePositionToCoverArea, exceptionAreaIDsList);
+                }
+            }
+
+
+            returnAreaToCover = returnAreaToCover ?? GetSlowestArea();
+
+            return returnAreaToCover;
         }
 
 

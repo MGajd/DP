@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Boustrophedon.Communication;
 
 namespace Boustrophedon.Machine
 {
@@ -41,5 +42,7 @@ namespace Boustrophedon.Machine
             }
             return area1ID;      
         }
+
+
     }
 }

@@ -168,7 +168,17 @@ namespace Boustrophedon.AreaObjects
 
         public Enumerations.CoverLineStatus Status;
 
+        public Enumerations.CoverLineDirection CoverLineDirection
+        {
+            get
+            {
+                if (StartingCoordinates.X > EndingCoordinates.X)
+                    return Enumerations.CoverLineDirection.upToDown;
+                else
+                    return Enumerations.CoverLineDirection.downToUp;
+            }
 
+        }
         public CoverLine() { }
 
         /// <summary>

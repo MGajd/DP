@@ -15,6 +15,9 @@ namespace Boustrophedon.WorldToCover
 
         public static int CoverLineIDCounter = 1;
         public static int AreaToCoverIDCounter = 1;
+        public static int CommunicationRequestID = 0;
+        public static int CommunicationResponseID = 0;
+
 
         public static bool AreaCovered = false;
         public static bool CoverageStarted = false;
@@ -42,13 +45,14 @@ namespace Boustrophedon.WorldToCover
         public static void AddCoveredSubArea(CoveredSubArea subArea)
         {
             //TODO: critical - add subarea, find if new, or add to existing in Covered
-            
+
         }
 
 
         public static CoverLine GetCoverLineByID(string coverLineID)
         {
-            return CoverLinesList.Where(a => a.CoverLineID == coverLineID).First();
+            List<CoverLine> returnCoverLineList = CoverLinesList.Where(a => a.CoverLineID == coverLineID).ToList();
+            return returnCoverLineList.Count == 0 ? null : returnCoverLineList.First();
         }
 
         public static void AddCoverLine(CoverLine newCoverLine, decimal width)
@@ -117,31 +121,20 @@ namespace Boustrophedon.WorldToCover
 
                     previousUncovered = totalUncovered;
 
-
-
-
-
-
-
-
-
                 }
 
-
-
-
-        }
+            }
 
             return result.ToString();
         }
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
+
         /// <summary>
         /// Initializes and starts the process of coverring the world
         /// </summary>
@@ -156,7 +149,7 @@ namespace Boustrophedon.WorldToCover
                 var coverLineID = nextCoverLine();
                 var coverLine = GetCoverLineByID(coverLineID);
                 MachineObject machine = Machines.GetMachineByID(coverLine.MachineID);
-                AreaToCover area = AreasToCover.Count()>0 ? GetAreaByID(coverLine.AreaToCoverID) : null;
+                AreaToCover area = AreasToCover.Count() > 0 ? GetAreaByID(coverLine.AreaToCoverID) : null;
 
                 decimal totalUncovered = 0;
                 foreach (var area2cover in AreasToCover)
@@ -166,10 +159,10 @@ namespace Boustrophedon.WorldToCover
 
 
                 if (area != null && area.AreaToCoverID == coverLine.AreaToCoverID)
-                    result.AppendLine("CovelLineID: " + coverLineID + "\t MachineID: " + coverLine.MachineID + "\t WorkingWidth: " + machine.WorkingWidth + "\t AreaToCoverID: " + area.AreaToCoverID + "\t AreaToCoverUncoveredWidth: " + area.Width + "\t TotalUncoveredWidth: " + totalUncovered.ToString() + "("+ previousUncovered +" - " + (previousUncovered - totalUncovered).ToString() + ")");
+                    result.AppendLine("CovelLineID: " + coverLineID + "\t MachineID: " + coverLine.MachineID + "\t WorkingWidth: " + machine.WorkingWidth + "\t AreaToCoverID: " + area.AreaToCoverID + "\t AreaToCoverUncoveredWidth: " + area.Width + "\t TotalUncoveredWidth: " + totalUncovered.ToString() + "(" + previousUncovered + " - " + (previousUncovered - totalUncovered).ToString() + ")");
 
                 else
-                    result.AppendLine("CovelLineID: " + coverLineID + "\t MachineID: " + coverLine.MachineID + "\t WorkingWidth: " + machine.WorkingWidth + "\t AreaToCoverID: " + coverLine.AreaToCoverID + "\t AreaToCoverUncoveredWidth: 0" + "\t TotalUncoveredWidth: " + totalUncovered.ToString() + "("+ previousUncovered + " - " + (previousUncovered - totalUncovered).ToString() + ")");
+                    result.AppendLine("CovelLineID: " + coverLineID + "\t MachineID: " + coverLine.MachineID + "\t WorkingWidth: " + machine.WorkingWidth + "\t AreaToCoverID: " + coverLine.AreaToCoverID + "\t AreaToCoverUncoveredWidth: 0" + "\t TotalUncoveredWidth: " + totalUncovered.ToString() + "(" + previousUncovered + " - " + (previousUncovered - totalUncovered).ToString() + ")");
 
                 previousUncovered = totalUncovered;
             }
@@ -181,7 +174,7 @@ namespace Boustrophedon.WorldToCover
 
         private static string nextCoverLine()
         {
-            Machines.MachineList.Sort((m1,m2) => DateTime.Compare(m1.EndsAt, m2.EndsAt));
+            Machines.MachineList.Sort((m1, m2) => DateTime.Compare(m1.EndsAt, m2.EndsAt));
             var machine = Machines.MachineList.First();
             machine.Position = GetCoverLineByID(machine.ActualCoverLineID).EndingCoordinates;
             return AddMachineToCover(Machines.MachineList.First());
@@ -215,9 +208,9 @@ namespace Boustrophedon.WorldToCover
                 AreaCovered = true;
                 return "NOTHING TO COVER / AREA (ALREADY) FULLY COVERED";
             }
-                
 
-            
+
+
 
         }
 
@@ -252,9 +245,9 @@ namespace Boustrophedon.WorldToCover
                 if (list.Count() > 0)
                     return list.First();
             }
-                //TODO:major - if null
-                return GetAreaByID(GetFirstAreaID());
-                //throw new NotImplementedException();
+            //TODO:major - if null
+            return GetAreaByID(GetFirstAreaID());
+            //throw new NotImplementedException();
         }
 
         internal static bool AreaExists(string areaToCoverID)

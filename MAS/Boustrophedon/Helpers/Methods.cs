@@ -42,5 +42,10 @@ namespace Boustrophedon.Helpers
             return Convert.ToDecimal(Math.Sqrt(power));
 
         }
+
+        public static double GetCoveringTimeSeconds(Coordinates a, Coordinates b, decimal speed)
+        {
+            return (double)(GetDistance(a,b) / speed);
+        }
     }
 }
