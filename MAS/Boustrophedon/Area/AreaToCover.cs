@@ -57,7 +57,6 @@ namespace Boustrophedon.Area
             
             else
                 return GetLastCoverLineFromLeft();
-
         }
 
         private string GetLastCoverLineFromLeft()
@@ -134,8 +133,6 @@ namespace Boustrophedon.Area
             CoordinateList[3].X += width;
         }
 
-
-
         /// <summary>
         /// Use when area shape is rectange and starts at coordinates [0,0]
         /// </summary>
@@ -154,6 +151,10 @@ namespace Boustrophedon.Area
             Shape = (int)Enumerations.Shape.rectangle;
         }
 
+        /// <summary>
+        /// Use when you want to make a copy of existing AreaToCover
+        /// </summary>
+        /// <param name="area"></param>
         public AreaToCover(AreaToCover area)
         {
             CoordinateList = new List<Coordinates>();
@@ -163,7 +164,19 @@ namespace Boustrophedon.Area
                 CoordinateList.Add(new Coordinates(coordinate.X, coordinate.Y));
             }
             AreaToCoverID = World.AreaToCoverIDCounter++.ToString();
-        } 
+        }
+
+        /// <summary>
+        /// Use when the shape of area to cover is not rectangle.
+        /// </summary>
+        /// <param name="CoordinatesList"></param>
+        public AreaToCover(List<Coordinates> coordinatesList)
+        {
+            this.CoordinateList = coordinatesList;
+            AreaToCoverID = World.AreaToCoverIDCounter++.ToString();
+
+            Shape = (int)Enumerations.Shape.polygon;
+        }
 
         public bool AddObstacle(Obstacle obstacle)
         {

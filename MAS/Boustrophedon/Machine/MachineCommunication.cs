@@ -19,7 +19,7 @@ namespace Boustrophedon.Machine
             switch (request.RequestType)
             {
                 case Communication.Enum.RequestType.CoverLineFinishStatus:
-                    response = PrepareCoverLineFinishResponse(actualCoverLine);
+                    response = AssumedCoverLineFinishResponse(actualCoverLine);
                     break;
                 case Communication.Enum.RequestType.StatusRequest:
                  //   break;
@@ -45,7 +45,7 @@ namespace Boustrophedon.Machine
 
         }
 
-        private Response PrepareCoverLineFinishResponse(CoverLine actualCoverLine)
+        private Response AssumedCoverLineFinishResponse(CoverLine actualCoverLine)
         {
             Response response = new Response();
 

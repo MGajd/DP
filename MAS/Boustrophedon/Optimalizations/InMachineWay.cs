@@ -20,10 +20,16 @@ namespace Boustrophedon.Optimalizations
         public static bool IsInMyWay(MachineObject machineObject, AreaToCover areaToCover)
         {
 
-            string reciverMachineID = areaToCover.GetLastCoverLine(machineObject.VerticalPosition);
+            string coverlineID = areaToCover.GetLastCoverLine(machineObject.VerticalPosition);
+            string reciverMachineID = string.Empty;
+            try
+            {
+                reciverMachineID = World.CoverLinesList.Where(a => a.CoverLineID == coverlineID).First().MachineID;
+            }
+            catch { }
 
-            if (reciverMachineID == null)
-                return true;
+            if (string.IsNullOrEmpty(reciverMachineID))
+                return false;
 
             Request request = new Communication.Request();
 
