@@ -62,30 +62,35 @@ namespace Boustrophedon.WorldToCover
             if (newCoverLine.IsDivide)
                 return;
             AreaToCover area = GetAreaByID(newCoverLine.AreaToCoverID);
-            if (area.LeftDown.X + width / 2 == newCoverLine.StartingCoordinates.X || area.LeftDown.X + width / 2 == newCoverLine.EndingCoordinates.X)
-            {
-                area.MinusWidthFromLeft(width);
-            }
-            else
-            {
-                area.MinusWidthFromRight(width);
-            }
+            area.AddCoverLine(newCoverLine);
 
-            if (area.CoordinateList[0].X >= area.CoordinateList[1].X)
-            {
-                int index = 0;
-                while (index < AreasToCover.Count)
-                {
-                    if (AreasToCover[index].CoordinateList[0].X >= AreasToCover[index].CoordinateList[1].X)
-                    {
-                        AreasToCover.RemoveAt(index);
-                        if (AreasToCover.Count == 0)
-                            AreaCovered = true;
-                        break;
-                    }
-                    index++;
-                }
-            }
+
+
+
+            //if (area.LeftDown.X + width / 2 == newCoverLine.StartingCoordinates.X || area.LeftDown.X + width / 2 == newCoverLine.EndingCoordinates.X)
+            //{
+            //    area.MinusWidthFromLeft(width);
+            //}
+            //else
+            //{
+            //    area.MinusWidthFromRight(width);
+            //}
+
+            //if (area.CoordinateList[0].X >= area.CoordinateList[1].X)
+            //{
+            //    int index = 0;
+            //    while (index < AreasToCover.Count)
+            //    {
+            //        if (AreasToCover[index].CoordinateList[0].X >= AreasToCover[index].CoordinateList[1].X)
+            //        {
+            //            AreasToCover.RemoveAt(index);
+            //            if (AreasToCover.Count == 0)
+            //                AreaCovered = true;
+            //            break;
+            //        }
+            //        index++;
+            //    }
+            //}
         }
 
         /// <summary>

@@ -166,6 +166,13 @@ namespace Boustrophedon.AreaObjects
         public string MachineID;
         public string AreaToCoverID;
 
+        public decimal X
+        { get { return StartingCoordinates.X; } }
+
+
+        public decimal Width
+        { get { return Machine.Machines.GetMachineByID(MachineID).WorkingWidth; } }
+
         public Enumerations.CoverLineStatus Status;
 
         public Enumerations.CoverLineDirection CoverLineDirection
@@ -192,10 +199,10 @@ namespace Boustrophedon.AreaObjects
             StartingCoordinates = new Coordinates(_oldCoverLine.EndingCoordinates.X + xCoordinateAdd, _oldCoverLine.EndingCoordinates.Y + yCoordinateAdd);
             EndingCoordinates = new Coordinates(_oldCoverLine.StartingCoordinates.X + xCoordinateAdd, _oldCoverLine.StartingCoordinates.Y + yCoordinateAdd);
 
-            this.IsDivide = isDivide;
-            this.AreaToCoverID = areaToCoverID ?? _oldCoverLine.AreaToCoverID;
-            this.MachineID = _oldCoverLine.MachineID;
-            this.Status = Enumerations.CoverLineStatus.reserved;
+            IsDivide = isDivide;
+            AreaToCoverID = areaToCoverID ?? _oldCoverLine.AreaToCoverID;
+            MachineID = _oldCoverLine.MachineID;
+            Status = Enumerations.CoverLineStatus.reserved;
 
 
         }

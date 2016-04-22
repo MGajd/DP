@@ -372,28 +372,55 @@ namespace Boustrophedon.Machine
         {
             //first gets left or right to know whether check AreaToCover from left or right
 
-            //left
-            if (this.Position.X < (World.AreasToCover.OrderBy(a => a.MinX).First().MinX + World.AreasToCover.OrderByDescending(a => a.MaxX).First().MaxX) / 2)
+
+
+            if (string.IsNullOrEmpty(ActualCoverLineID))
             {
-                //down
-                if (this.Position.Y < (World.AreasToCover.OrderBy(a => a.MinY).First().MinY + World.AreasToCover.OrderByDescending(a => a.MaxY).First().MaxY) / 2)
-                    return Enumerations.MachinePositionToCoverArea.leftDown;
-                //up
+                if (this.Position.X < (World.AreasToCover.OrderBy(a => a.MinX).First().MinX + World.AreasToCover.OrderByDescending(a => a.MaxX).First().MaxX) / 2)
+                {
+                    //down
+                    if (this.Position.Y < (World.AreasToCover.OrderBy(a => a.MinX).First().MinY + World.AreasToCover.OrderByDescending(a => a.MinX).First().MaxY) / 2)
+                        return Enumerations.MachinePositionToCoverArea.leftDown;
+                    //up
+                    else
+                        return Enumerations.MachinePositionToCoverArea.LeftUp;
+                }
+                //right
                 else
-                    return Enumerations.MachinePositionToCoverArea.LeftUp;
+                {
+                    //down
+                    if (this.Position.Y < (World.AreasToCover.OrderBy(a => a.MaxX).First().MinY + World.AreasToCover.OrderByDescending(a => a.MaxX).First().MaxY) / 2)
+                        return Enumerations.MachinePositionToCoverArea.rightDown;
+                    //up
+                    else
+                        return Enumerations.MachinePositionToCoverArea.rightUp;
+                }
             }
-            //right
             else
             {
-                //down
-                if (this.Position.Y < (World.AreasToCover.OrderBy(a => a.MinY).First().MinY + World.AreasToCover.OrderByDescending(a => a.MaxY).First().MaxY) / 2)
-                    return Enumerations.MachinePositionToCoverArea.rightDown;
-                //up
+                CoverLine actualCoverLine = World.GetCoverLineByID(ActualCoverLineID);
+                //left
+                if (this.Position.X < (World.AreasToCover.OrderBy(a => a.MinX).First().MinX + World.AreasToCover.OrderByDescending(a => a.MaxX).First().MaxX) / 2)
+                {
+                    //down
+                    if (actualCoverLine.StartingCoordinates.Y > actualCoverLine.EndingCoordinates.Y)
+                        return Enumerations.MachinePositionToCoverArea.leftDown;
+                    //up
+                    else
+                        return Enumerations.MachinePositionToCoverArea.LeftUp;
+                }
+                //right
                 else
-                    return Enumerations.MachinePositionToCoverArea.rightUp;
+                {
+                    //down
+                    if (actualCoverLine.StartingCoordinates.Y > actualCoverLine.EndingCoordinates.Y)
+                        return Enumerations.MachinePositionToCoverArea.rightDown;
+                    //up
+                    else
+                        return Enumerations.MachinePositionToCoverArea.rightUp;
+                }
             }
         }
-
         /// <summary>
         /// Check whether to divide area.
         /// </summary>

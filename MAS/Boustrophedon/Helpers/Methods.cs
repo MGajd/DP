@@ -45,7 +45,7 @@ namespace Boustrophedon.Helpers
 
         public static double GetCoveringTimeSeconds(Coordinates a, Coordinates b, decimal speed)
         {
-            return (double)(GetDistance(a,b) / speed);
+            return (double)(GetDistance(a, b) / speed);
         }
 
         internal static decimal GetMax(decimal x, decimal y)
@@ -57,5 +57,30 @@ namespace Boustrophedon.Helpers
             return x < y ? x : y;
         }
 
+        internal static Coordinates LinearInterpolation(Coordinates coordinates1, Coordinates coordinates2, decimal x)
+        {
+            decimal y;
+
+            if (coordinates2.Y == coordinates1.Y)
+                y = coordinates2.Y;
+            else
+                y = ((coordinates2.Y - coordinates1.Y) / (coordinates2.Y - coordinates1.Y)) * (x - coordinates1.X) + coordinates1.Y;
+
+            return new Coordinates(x, y);
+        }
+
+        internal static int GetCoordinatecIndex(List<Coordinates> coordinateList, Coordinates coordinates)
+        {
+            int counter = 0;
+            foreach (Coordinates coor in coordinateList)
+            {
+                if (coor.X == coordinates.X && coor.Y == coordinates.Y)
+                    return counter;
+                else
+                    counter++;
+            }
+
+            throw new Exception("Coordinates not found!");
+        }
     }
 }
