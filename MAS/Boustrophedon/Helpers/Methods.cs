@@ -47,5 +47,15 @@ namespace Boustrophedon.Helpers
         {
             return (double)(GetDistance(a,b) / speed);
         }
+
+        internal static decimal GetMax(decimal x, decimal y)
+        {
+            return x > y ? x : y;
+        }
+        internal static decimal GetMin(decimal x, decimal y)
+        {
+            return x < y ? x : y;
+        }
+
     }
 }

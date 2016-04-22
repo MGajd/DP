@@ -61,7 +61,7 @@ namespace Boustrophedon.WorldToCover
 
             if (newCoverLine.IsDivide)
                 return;
-            AreaToCover area = AreasToCover.Where(a => a.AreaToCoverID == newCoverLine.AreaToCoverID).First();
+            AreaToCover area = GetAreaByID(newCoverLine.AreaToCoverID);
             if (area.LeftDown.X + width / 2 == newCoverLine.StartingCoordinates.X || area.LeftDown.X + width / 2 == newCoverLine.EndingCoordinates.X)
             {
                 area.MinusWidthFromLeft(width);
@@ -88,7 +88,10 @@ namespace Boustrophedon.WorldToCover
             }
         }
 
-
+        /// <summary>
+        /// Sets starting cover lines foreach machine
+        /// </summary>
+        /// <returns></returns>
         private static string FirstCoverLines()
         {
             StringBuilder result = new StringBuilder();
@@ -97,9 +100,6 @@ namespace Boustrophedon.WorldToCover
                 if (!AreaCovered)
                 //result.AppendLine(AddMachineToCover(machine));
                 {
-
-
-
 
                     var coverLineID = AddMachineToCover(machine);
                     var coverLine = GetCoverLineByID(coverLineID);
@@ -129,12 +129,6 @@ namespace Boustrophedon.WorldToCover
         }
 
 
-
-
-
-
-
-
         /// <summary>
         /// Initializes and starts the process of coverring the world
         /// </summary>
@@ -157,7 +151,6 @@ namespace Boustrophedon.WorldToCover
                     totalUncovered += area2cover.Width;
                 }
 
-
                 if (area != null && area.AreaToCoverID == coverLine.AreaToCoverID)
                     result.AppendLine("CovelLineID: " + coverLineID + "\t MachineID: " + coverLine.MachineID + "\t WorkingWidth: " + machine.WorkingWidth + "\t AreaToCoverID: " + area.AreaToCoverID + "\t AreaToCoverUncoveredWidth: " + area.Width + "\t TotalUncoveredWidth: " + totalUncovered.ToString() + "(" + previousUncovered + " - " + (previousUncovered - totalUncovered).ToString() + ")");
 
@@ -169,7 +162,6 @@ namespace Boustrophedon.WorldToCover
 
             result.AppendLine("NOTHING TO COVER / AREA (ALREADY) FULLY COVERED");
             return result.ToString();
-
         }
 
         private static string nextCoverLine()
@@ -194,9 +186,9 @@ namespace Boustrophedon.WorldToCover
                 {
                     //TODO:major - divide machines into groups
                     if (string.IsNullOrEmpty(machineObject.ActualCoverLineID))
-                        machineObject.GetFirstCoverLine();
+                        machineObject.GetCoverLine();
                     else
-                        machineObject.GetFirstCoverLine(World.GetAreaToCoverByCoverLineID(machineObject.ActualCoverLineID).AreaToCoverID);
+                        machineObject.GetCoverLine(World.GetAreaToCoverByCoverLineID(machineObject.ActualCoverLineID).AreaToCoverID);
 
                     return machineObject.StartWork();
 

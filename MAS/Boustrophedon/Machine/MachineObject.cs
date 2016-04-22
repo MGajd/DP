@@ -143,9 +143,10 @@ namespace Boustrophedon.Machine
 
         public Enumerations.HorizontalPosition HorizontalPosition
         {
-            get {
+            get
+            {
                 var machinePosition = GetMachinePositionToCoverArea();
-                if ( machinePosition == Enumerations.MachinePositionToCoverArea.leftDown || machinePosition == Enumerations.MachinePositionToCoverArea.LeftUp)
+                if (machinePosition == Enumerations.MachinePositionToCoverArea.leftDown || machinePosition == Enumerations.MachinePositionToCoverArea.LeftUp)
                     return Enumerations.HorizontalPosition.left;
                 else
                     return Enumerations.HorizontalPosition.right;
@@ -165,7 +166,8 @@ namespace Boustrophedon.Machine
         }
 
 
-        public MachineObject() {
+        public MachineObject()
+        {
             if (Machines.MachineList == null)
             {
                 Machines.MachineList = new List<MachineObject>();
@@ -198,39 +200,20 @@ namespace Boustrophedon.Machine
         /// Return CoverLine where machine starts its work
         /// </summary>
         /// <returns></returns>
-        public string GetFirstCoverLine(string areaToCoverID = "1")
+        public string GetCoverLine(string areaToCoverID = "1")
         {
             var machinePosition = GetMachinePositionToCoverArea();
 
             CoverLine coverLine;
             if (!DivideIsNecessary(areaToCoverID, machinePosition))
             {
-
-
-                coverLine =  GetCoverLine(machinePosition, World.CoverDirection);
-
-
-                //switch (World.CoverDirection)
-                //{
-                //    case (int) Enumerations.CoverDirection.leftToRight:
-                //        return GetFirstCoverLineFromLeft(GetFirstCoverLineDirection());
-
-                //    case (int)Enumerations.CoverDirection.rightToLeft:
-                //        return GetFirstCoverLineFromRight(GetFirstCoverLineDirection());
-
-
-                //    case (int)Enumerations.CoverDirection.both:
-                //        throw new NotImplementedException();
-
-                //    default:
-                //        throw new NotImplementedException();
-                //}
+                coverLine = GetCoverLine(machinePosition, World.CoverDirection);
             }
             else
-                coverLine = DivideCoverArea(machinePosition ,areaToCoverID);
+                coverLine = DivideCoverArea(machinePosition, areaToCoverID);
 
 
-            coverLine.MachineID = this.MachineID;
+            coverLine.MachineID = MachineID;
 
             NextCoverLineID = coverLine.CoverLineID;
 
@@ -240,7 +223,7 @@ namespace Boustrophedon.Machine
 
             ActualCoverLineID = coverLine.CoverLineID;
 
-            return coverLine.CoverLineID;   
+            return coverLine.CoverLineID;
         }
 
         private CoverLine GetCoverLine(Enumerations.MachinePositionToCoverArea machinePositionToCoverArea, Enumerations.CoverDirection coverDirection)
@@ -248,7 +231,6 @@ namespace Boustrophedon.Machine
             AreaToCover areaToCover = GetBestAreaToCoverIDForMachine(MachineID, machinePositionToCoverArea);
             CoverLine coverLine = areaToCover.GetCoverLine(VerticalPosition, WorkingWidth);
 
-            //TODO:blocker - decide when area is inner
             if (ActualCoverLineID != null)
             {
                 if (areaToCover.AreaToCoverID == World.GetAreaToCoverByCoverLineID(ActualCoverLineID).AreaToCoverID)
@@ -265,17 +247,17 @@ namespace Boustrophedon.Machine
             return coverLine;
         }
 
-        private AreaToCover GetBestAreaToCoverIDForMachine(string machineID, Enumerations.MachinePositionToCoverArea machinePositionToCoverArea, List<string> exceptionAreaIDsList = null )
+        private AreaToCover GetBestAreaToCoverIDForMachine(string machineID, Enumerations.MachinePositionToCoverArea machinePositionToCoverArea, List<string> exceptionAreaIDsList = null)
         {
             AreaToCover returnAreaToCover = null;
             if (!string.IsNullOrEmpty(ActualCoverLineID))
             {
-                    CoverLine actualCoverLine = World.GetCoverLineByID(ActualCoverLineID);
-                    string areaID = actualCoverLine.AreaToCoverID;
+                CoverLine actualCoverLine = World.GetCoverLineByID(ActualCoverLineID);
+                string areaID = actualCoverLine.AreaToCoverID;
 
                 switch (World.CoverDirection)
                 {
-                    case Enumerations.CoverDirection.leftToRight :
+                    case Enumerations.CoverDirection.leftToRight:
                         if (VerticalPosition == Enumerations.VerticalPosition.down)
                         {
                             string nextAreaID = ((int.Parse(actualCoverLine.AreaToCoverID)) + 1).ToString();
@@ -306,12 +288,15 @@ namespace Boustrophedon.Machine
             foreach (var area in orderedAreaToCoverList)
             {
                 if (area.IsHelpNeeded() && area.CanBeMachineAdded(machineID))
+                {
                     returnAreaToCover = area;
+                    break;
+                }
             }
 
 
             //speed optimalization
-            //whether there is not a machine that is slower, a will mind me or whether there is not machine going oposite me...
+            //whether there is not a machine that is slower, and will sloww me down me or whether there is not machine going oposite me...
             if (Settings.InMachineWayOptimalization)
             {
                 if (Optimalizations.InMachineWay.IsInMyWay(this, returnAreaToCover))
@@ -358,7 +343,6 @@ namespace Boustrophedon.Machine
                 tempAreaToCoverList.Reverse();
 
             return tempAreaToCoverList;
-
         }
 
 
@@ -380,7 +364,10 @@ namespace Boustrophedon.Machine
 
 
 
-
+        /// <summary>
+        ///Return position of machine against cover area
+        /// </summary>
+        /// <returns></returns>
         private Enumerations.MachinePositionToCoverArea GetMachinePositionToCoverArea()
         {
             //first gets left or right to know whether check AreaToCover from left or right
@@ -414,14 +401,11 @@ namespace Boustrophedon.Machine
         /// <returns>Returns bolean value whether the area should be divided.</returns>
         private bool DivideIsNecessary(string AreaToCoverID, Enumerations.MachinePositionToCoverArea machinePosition)
         {
-            //TODO:critical - optimalization implement the decision of the area divide
-
-
             if ((World.CoverDirection == Enumerations.CoverDirection.leftToRight && machinePosition == Enumerations.MachinePositionToCoverArea.leftDown)
             || (World.CoverDirection == Enumerations.CoverDirection.rightToLeft && machinePosition == Enumerations.MachinePositionToCoverArea.rightUp))
                 return false;
 
-            if (World.AreaExists((( int.Parse(AreaToCoverID)) + 1).ToString()))
+            if (World.AreaExists(((int.Parse(AreaToCoverID)) + 1).ToString()))
                 return false;
 
             if (Machines.MachineList.Select(a => a.WorkingWidth).Sum() * 2 < World.GetAreaByID(AreaToCoverID).Width)
@@ -442,7 +426,7 @@ namespace Boustrophedon.Machine
             AreaToCover oldArea = World.GetAreaByID(areaToCoverID);
             AreaToCover newArea = new AreaToCover(oldArea);
 
-            World.AreasToCover.Add(newArea); 
+            World.AreasToCover.Add(newArea);
 
             if ((int)machinePosition > 2 && World.CoverDirection == Enumerations.CoverDirection.leftToRight)
             {

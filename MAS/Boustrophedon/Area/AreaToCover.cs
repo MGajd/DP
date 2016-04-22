@@ -4,6 +4,7 @@ using System.Drawing;
 using Boustrophedon.AreaObjects;
 using Boustrophedon.WorldToCover;
 using Boustrophedon.Machine;
+using System.Linq;
 
 namespace Boustrophedon.Area
 {
@@ -119,36 +120,47 @@ namespace Boustrophedon.Area
         private List<Obstacle> _obstaclesList;
 
         private bool _allObstaclesKnown = true;
-        private int _shape;
+        private Enumerations.Shape _shape;
 
         internal void MinusWidthFromRight(decimal width)
         {
-            CoordinateList[1].X -= width;
-            CoordinateList[2].X -= width;
-        }
+            //if shape is rectangle or square
+            if ((int)Shape < 3)
+            {
+                CoordinateList[1].X -= width;
+                CoordinateList[2].X -= width;
+                //TODO:blocker - if shape is rectangle, change Y coordinates
+            }
 
+        }
         internal void MinusWidthFromLeft(decimal width)
         {
-            CoordinateList[0].X += width;
-            CoordinateList[3].X += width;
-        }
+            //if shape is rectangle or square
+            if ((int)Shape < 3)
+            {
+                CoordinateList[0].X += width;
+                CoordinateList[3].X += width;
+                //TODO:blocker - if shape is rectangle, change Y coordinates
+            }
 
+
+
+        }
         /// <summary>
         /// Use when area shape is rectange and starts at coordinates [0,0]
         /// </summary>
         /// <param name="coordinate">Coordinate oposite to [0,0]</param>
         public AreaToCover(Coordinates coordinate)
         {
+            AreaToCoverID = World.AreaToCoverIDCounter++.ToString();
 
             CoordinateList = new List<Coordinates>();
-
             CoordinateList.Add(new Coordinates(0, 0));
             CoordinateList.Add(new Coordinates(coordinate.X, 0));
             CoordinateList.Add(coordinate);
             CoordinateList.Add(new Coordinates(0, coordinate.Y));
 
-
-            Shape = (int)Enumerations.Shape.rectangle;
+            Shape = coordinate.X == coordinate.Y ? Enumerations.Shape.square : Enumerations.Shape.rectangle;
         }
 
         /// <summary>
@@ -175,7 +187,7 @@ namespace Boustrophedon.Area
             this.CoordinateList = coordinatesList;
             AreaToCoverID = World.AreaToCoverIDCounter++.ToString();
 
-            Shape = (int)Enumerations.Shape.polygon;
+            Shape = coordinatesList.Count == 3 ? Enumerations.Shape.triangle : Enumerations.Shape.polygon;
         }
 
         public bool AddObstacle(Obstacle obstacle)
@@ -202,7 +214,7 @@ namespace Boustrophedon.Area
             }
         }
 
-        public int Shape
+        public Enumerations.Shape Shape
         {
             get
             {
@@ -246,6 +258,9 @@ namespace Boustrophedon.Area
             get { return MaxX - MinX; }
         }
 
+
+
+        //TODO:major- implement new points gettnig, taking diversification of area shape
         public Coordinates LeftUp
         {
             get
@@ -386,8 +401,13 @@ namespace Boustrophedon.Area
             if (reverseDirection)
                 coef = -1;
             CoverLine coverLine = new CoverLine();
-            coverLine.StartingCoordinates = new Coordinates(LeftDown.X + (coef * workingWidth) / 2, LeftDown.Y);
-            coverLine.EndingCoordinates = new Coordinates(LeftUp.X + (coef * workingWidth) / 2, LeftUp.Y);
+
+
+
+
+            //TODO:blocker - change Y-coordinates to the proper Y due to shape
+            coverLine.StartingCoordinates = new Coordinates(MinX + (coef * workingWidth) / 2, GetMinY(MinX, workingWidth));
+            coverLine.EndingCoordinates = new Coordinates(MinX + (coef * workingWidth) / 2, GetMaxY(MinX, workingWidth));// LeftUp.Y);
 
             coverLine.Status = Enumerations.CoverLineStatus.reserved;
             coverLine.IsDivide = false;
@@ -397,6 +417,93 @@ namespace Boustrophedon.Area
                 coverLine.ReverseCoordinates();
             return coverLine;
         }
+
+
+        /// <summary>
+        /// Returns min Y for values between X an X + offset
+        /// </summary>
+        /// <param name="X">X Coordinate</param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        private int GetMinY(decimal X, decimal offset)
+        {
+            List<Coordinates> coordinatesList = GetOuterPoints(CoordinateList, Helpers.Methods.GetMin(X,X+offset), Helpers.Methods.GetMax(X, X+offset));
+
+            for (int i = 0; i < coordinatesList.Count; i++)
+            {
+                Helpers.Methods.LinearInterpolation()//not like that at all
+            }
+        }
+
+        /// <summary>
+        /// Returns max Y for values between X an X + offset
+        /// </summary>
+        /// <param name="X">X Coordinate</param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        private int GetMaxY(decimal X, decimal offset)
+        {
+            Coordinates[] tempArray = new Coordinates[CoordinateList.Count];
+            List<Coordinates> reversedList = new List<Coordinates>();
+            CoordinateList.CopyTo(tempArray);
+            reversedList = tempArray.ToList();
+            reversedList.Reverse();
+            reversedList.Insert(0, new Coordinates(reversedList.Last().X, reversedList.Last().Y));
+
+            GetOuterPoints(reversedList, Helpers.Methods.GetMin(X, X + offset), Helpers.Methods.GetMax(X, X + offset));
+        }
+
+        /// <summary>
+        /// Returns list of Coordinates, that are necessary to count min or max Y
+        /// </summary>
+        /// <param name="coordinateList"></param>
+        /// <param name="v1"></param>
+        /// <param name="v2"></param>
+        /// <returns></returns>
+        private List<Coordinates> GetOuterPoints(List<Coordinates> coordinateList, decimal x1, decimal x2)
+        {
+
+            List<Coordinates> growingCoordinatesList = GetGrowingCoordinatesList(coordinateList);
+            List<Coordinates> resultList = new List<Coordinates>();
+            int coordinatesCount = growingCoordinatesList.Count;
+            decimal from = -1, to = -1;
+
+            for (int i = 0; i <= coordinatesCount; i++)
+            {
+                if (coordinateList[i].X >= x1)
+                {
+                    from = coordinateList[i].X;
+                }
+
+                if (to == -1 && coordinateList[i].X >= x2)
+                {
+                    to = coordinateList[i].X;
+                }
+            }
+
+            from = from == -1 ? 0 : from;
+            to = to == -1 ? coordinateList.Count : to;
+            return coordinateList.GetRange((int)from, (int)(to - from + 1));
+        }
+
+        private List<Coordinates> GetGrowingCoordinatesList(List<Coordinates> coordinateList)
+        {
+            List<Coordinates> resultList = new List<Coordinates>();
+            foreach (var coor in coordinateList)
+            {
+                if (resultList.Count == 0)
+                    resultList.Add(coor);
+                else
+                {
+                    if (resultList.Last().X < coor.X)
+                        resultList.Add(coor);
+                    else
+                        break;
+                }
+            }
+            return resultList;
+        }
+
 
         public CoverLine GetLineFromLeft(decimal width, decimal workingWidth, bool reverseDirection = false)
          {

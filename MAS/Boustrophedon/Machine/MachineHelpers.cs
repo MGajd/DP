@@ -38,7 +38,7 @@ namespace Boustrophedon.Machine
                     break;
                 default:
                     //TODO:minor Implement othe cover direction decisionns
-                    throw new NotImplementedException("Implement othe cover direction decisionns");
+                    throw new NotImplementedException("Implement other cover direction decisionns");
             }
             return area1ID;      
         }

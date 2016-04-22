@@ -9,7 +9,6 @@ namespace Boustrophedon.Communication
 {
     public class Request
     {
-
         public string CommunicationRequestID;
 
         public string SenderMachineID;

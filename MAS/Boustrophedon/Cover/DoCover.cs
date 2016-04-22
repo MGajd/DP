@@ -15,22 +15,20 @@ namespace Boustrophedon.Cover
 
         public CoverLine GetNewCoverLine(string oldCoverLineID, MachineObject machineObject)
         {
-
-
             _oldCoverLine = WorldToCover.World.GetCoverLineByID(oldCoverLineID);
             _machineObject = machineObject;
 
             if (_oldCoverLine.IsDivide)
             {
 
-             }
+            }
             int coverDirectionCoefficient;
-                if (WorldToCover.World.CoverDirection == Enumerations.CoverDirection.leftToRight)
-                    coverDirectionCoefficient = 1;
-                else if (WorldToCover.World.CoverDirection == Enumerations.CoverDirection.rightToLeft)
-                    coverDirectionCoefficient = -1;
-                else
-                    coverDirectionCoefficient = 0;
+            if (WorldToCover.World.CoverDirection == Enumerations.CoverDirection.leftToRight)
+                coverDirectionCoefficient = 1;
+            else if (WorldToCover.World.CoverDirection == Enumerations.CoverDirection.rightToLeft)
+                coverDirectionCoefficient = -1;
+            else
+                coverDirectionCoefficient = 0;
 
             //newLine = new CoverLine();
 
@@ -66,7 +64,7 @@ namespace Boustrophedon.Cover
                 }
             }
 
-           // World.
+            // World.
 
             //TODO:blocker - add newLine to List<CoveredSubArea>
 
@@ -82,7 +80,7 @@ namespace Boustrophedon.Cover
                 newLine = new CoverLine(_oldCoverLine, (int)MachineObject.WorkingWidth, 0);
             }
             else
-            throw new NotImplementedException();
+                throw new NotImplementedException();
         }
 
         private void DownToUpRightToLeft(CoverLine _oldCoverLine, MachineObject _machineObject)
