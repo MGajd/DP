@@ -8,6 +8,6 @@ namespace Boustrophedon.WorldToCover
 {
     public static class Settings
     {
-        public static bool InMachineWayOptimalization = true;
+        public static bool InMachineWayOptimalization = false;
     }
 }

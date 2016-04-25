@@ -62,35 +62,37 @@ namespace Boustrophedon.WorldToCover
             if (newCoverLine.IsDivide)
                 return;
             AreaToCover area = GetAreaByID(newCoverLine.AreaToCoverID);
-            area.AddCoverLine(newCoverLine);
 
+            if (area.Width <= newCoverLine.Width)
+            {
+                World.RemoveAreaToCover(area.AreaToCoverID);
+            }
+            else
+            {
+                area.AddCoverLine(newCoverLine);
+            }
+        }
 
+        /// <summary>
+        /// Removes area with specified  AreaToCoverID
+        /// </summary>
+        /// <param name="areaToCoverID"></param>
+        private static void RemoveAreaToCover(string areaToCoverID)
+        {
+            int index = 0;
+            foreach (AreaToCover area in AreasToCover)
+            {
+                if (area.AreaToCoverID == areaToCoverID)
+                    break;
 
+                index++;
+            }
+            if (index < AreasToCover.Count)
+            {
+                AreasToCover.RemoveAt(index);
+            }
 
-            //if (area.LeftDown.X + width / 2 == newCoverLine.StartingCoordinates.X || area.LeftDown.X + width / 2 == newCoverLine.EndingCoordinates.X)
-            //{
-            //    area.MinusWidthFromLeft(width);
-            //}
-            //else
-            //{
-            //    area.MinusWidthFromRight(width);
-            //}
-
-            //if (area.CoordinateList[0].X >= area.CoordinateList[1].X)
-            //{
-            //    int index = 0;
-            //    while (index < AreasToCover.Count)
-            //    {
-            //        if (AreasToCover[index].CoordinateList[0].X >= AreasToCover[index].CoordinateList[1].X)
-            //        {
-            //            AreasToCover.RemoveAt(index);
-            //            if (AreasToCover.Count == 0)
-            //                AreaCovered = true;
-            //            break;
-            //        }
-            //        index++;
-            //    }
-            //}
+            AreaCovered =AreasToCover.Count == 0;
         }
 
         /// <summary>

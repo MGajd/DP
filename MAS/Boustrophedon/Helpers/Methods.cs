@@ -60,12 +60,21 @@ namespace Boustrophedon.Helpers
         internal static Coordinates LinearInterpolation(Coordinates coordinates1, Coordinates coordinates2, decimal x)
         {
             decimal y;
+            //if (coordinates1.y > coordinates2.y)
+            //{
+            //    Coordinates temp = coordinates1;
+            //    coordinates1 = coordinates2;
+            //    coordinates2 = temp;
+            //}
+
 
             if (coordinates2.Y == coordinates1.Y)
                 y = coordinates2.Y;
             else
-                y = ((coordinates2.Y - coordinates1.Y) / (coordinates2.Y - coordinates1.Y)) * (x - coordinates1.X) + coordinates1.Y;
+                y = ((coordinates2.Y - coordinates1.Y) / (coordinates2.X - coordinates1.X)) * (x - coordinates1.X) + coordinates1.Y;
 
+            //if (y < 0)
+            //    y *= -1;
             return new Coordinates(x, y);
         }
 

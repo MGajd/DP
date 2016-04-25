@@ -179,7 +179,7 @@ namespace Boustrophedon.AreaObjects
         {
             get
             {
-                if (StartingCoordinates.X > EndingCoordinates.X)
+                if (StartingCoordinates.Y > EndingCoordinates.Y)
                     return Enumerations.CoverLineDirection.upToDown;
                 else
                     return Enumerations.CoverLineDirection.downToUp;

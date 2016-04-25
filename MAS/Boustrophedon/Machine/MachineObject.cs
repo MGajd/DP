@@ -413,6 +413,7 @@ namespace Boustrophedon.Machine
                 else
                 {
                     //down
+                    //if (this.Position.Y < (World.AreasToCover.OrderBy(a => a.MaxX).First().MinY + World.AreasToCover.OrderByDescending(a => a.MaxX).First().MaxY) / 2)
                     if (actualCoverLine.StartingCoordinates.Y > actualCoverLine.EndingCoordinates.Y)
                         return Enumerations.MachinePositionToCoverArea.rightDown;
                     //up

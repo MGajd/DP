@@ -58,9 +58,9 @@ namespace Boustrophedon.Area
 
             else if ((verticalPosition == Enumerations.VerticalPosition.up && World.CoverDirection == Enumerations.CoverDirection.leftToRight)
                 || (verticalPosition == Enumerations.VerticalPosition.down && World.CoverDirection == Enumerations.CoverDirection.rightToLeft))
-            
-               return GetLastCoverLineFromRight();
-            
+
+                return GetLastCoverLineFromRight();
+
             else
                 return GetLastCoverLineFromLeft();
         }
@@ -76,7 +76,7 @@ namespace Boustrophedon.Area
             return GetCoverLineForY(RightUp.X + 1);
         }
 
-        private string GetCoverLineForY(decimal x )
+        private string GetCoverLineForY(decimal x)
         {
             foreach (var machine in Machines.MachineList)
             {
@@ -88,7 +88,7 @@ namespace Boustrophedon.Area
                         return coverLine.CoverLineID;
                 }
             }
-                    return null;
+            return null;
         }
 
 
@@ -109,7 +109,7 @@ namespace Boustrophedon.Area
 
             while (leftDown == null)
             {
-                if (CoordinateList[counter % CoordinateList.Count].X <= leftX && CoordinateList[GetSafeCoordinateListIndex(counter + 1)].X > leftX)
+                if (CoordinateList[GetSafeCoordinateListIndex(counter)].X <= leftX && CoordinateList[GetSafeCoordinateListIndex(counter + 1)].X > leftX)
                     leftDown = CoordinateList[GetSafeCoordinateListIndex(counter)];
 
                 counter++;
@@ -144,26 +144,26 @@ namespace Boustrophedon.Area
             if (newCoverLine.CoverLineDirection == Enumerations.CoverLineDirection.upToDown)
             {
                 if (World.CoverDirection == Enumerations.CoverDirection.leftToRight)
-                    DeleteCoordinatesBetween(leftDown, leftUp, newCoverLine);
-                if (World.CoverDirection == Enumerations.CoverDirection.rightToLeft)
+                    DeleteCoordinatesBetween(leftDown, leftUp, newCoverLine, -1);
+                else if (World.CoverDirection == Enumerations.CoverDirection.rightToLeft)
                     DeleteCoordinatesBetween(rightUp, rightDown, newCoverLine);
             }
 
             //zdola hore
-            if (newCoverLine.CoverLineDirection == Enumerations.CoverLineDirection.downToUp)
+            else if (newCoverLine.CoverLineDirection == Enumerations.CoverLineDirection.downToUp)
             {
                 if (World.CoverDirection == Enumerations.CoverDirection.leftToRight)
                     DeleteCoordinatesBetween(rightUp, rightDown, newCoverLine);
-                if (World.CoverDirection == Enumerations.CoverDirection.rightToLeft)
-                    DeleteCoordinatesBetween(leftDown, leftUp, newCoverLine);
+                else if (World.CoverDirection == Enumerations.CoverDirection.rightToLeft)
+                    DeleteCoordinatesBetween(leftDown, leftUp, newCoverLine, -1);
             }
 
 
         }
 
-        private void DeleteCoordinatesBetween(Coordinates coorFrom, Coordinates coorTo, CoverLine newCoverLine)
+        private void DeleteCoordinatesBetween(Coordinates coorFrom, Coordinates coorTo, CoverLine newCoverLine, int coef = 1)
         {
-            List<Coordinates> newCoordinates = AddNewIndexes(coorFrom, coorTo, newCoverLine);
+            List<Coordinates> newCoordinates = AddNewIndexes(coorFrom, coorTo, newCoverLine, coef);
             RemoveRedundantCoordinates();
 
             int coorFomIndex = Helpers.Methods.GetCoordinatecIndex(CoordinateList, newCoordinates.Last());
@@ -179,7 +179,7 @@ namespace Boustrophedon.Area
         {
             int oldCount = CoordinateListCount;
 
-            for (int i = 0; i< oldCount; )
+            for (int i = 0; i < oldCount;)
             {
                 if (CoordinateList[GetSafeCoordinateListIndex(i)] == CoordinateList[GetSafeCoordinateListIndex(i - 1)])
                     CoordinateList.RemoveAt(GetSafeCoordinateListIndex(i));
@@ -187,17 +187,17 @@ namespace Boustrophedon.Area
             }
         }
 
-        private List<Coordinates> AddNewIndexes(Coordinates coorFrom, Coordinates coorTo, CoverLine newCoverLine)
+        private List<Coordinates> AddNewIndexes(Coordinates coorFrom, Coordinates coorTo, CoverLine newCoverLine, int coef)
         {
 
             List<Coordinates> returnCoordinates = new List<Coordinates>();
 
             int coorToIndex = Helpers.Methods.GetCoordinatecIndex(CoordinateList, coorTo);
-            returnCoordinates.Add(Helpers.Methods.LinearInterpolation(CoordinateList[GetSafeCoordinateListIndex(coorToIndex)], CoordinateList[GetSafeCoordinateListIndex(coorToIndex - 1)], newCoverLine.X + newCoverLine.Width / 2));
+            returnCoordinates.Add(Helpers.Methods.LinearInterpolation(CoordinateList[GetSafeCoordinateListIndex(coorToIndex)], CoordinateList[GetSafeCoordinateListIndex(coorToIndex - 1)], newCoverLine.X + (newCoverLine.Width / 2) * coef));
             CoordinateList.Insert(coorToIndex, returnCoordinates.Last());
 
             int coorFromIndex = Helpers.Methods.GetCoordinatecIndex(CoordinateList, coorFrom);
-            returnCoordinates.Add(Helpers.Methods.LinearInterpolation(CoordinateList[GetSafeCoordinateListIndex(coorFromIndex)], CoordinateList[GetSafeCoordinateListIndex(coorFromIndex + 1)], newCoverLine.X + newCoverLine.Width / 2));
+            returnCoordinates.Add(Helpers.Methods.LinearInterpolation(CoordinateList[GetSafeCoordinateListIndex(coorFromIndex)], CoordinateList[GetSafeCoordinateListIndex(coorFromIndex + 1)], newCoverLine.X + (newCoverLine.Width / 2) * coef));
             CoordinateList.Insert(coorFromIndex + 1, returnCoordinates.Last());
 
             return returnCoordinates;
@@ -215,7 +215,8 @@ namespace Boustrophedon.Area
                 CoordinateList.RemoveRange(from + 1, CoordinateListCount - from - 1);
                 CoordinateList.RemoveRange(0, to);
             }
-                else {
+            else
+            {
                 CoordinateList.RemoveRange(from + 1, to - from - 1);
             }
         }
@@ -349,10 +350,11 @@ namespace Boustrophedon.Area
             }
         }
 
-        public int CoordinateListCount{
+        public int CoordinateListCount
+        {
             get
             { return CoordinateList.Count; }
-            }
+        }
 
         public Enumerations.Shape Shape
         {
@@ -459,7 +461,8 @@ namespace Boustrophedon.Area
             }
         }
 
-        public Coordinates RightUp {
+        public Coordinates RightUp
+        {
             get
             {
                 var x = MaxX;
@@ -520,12 +523,12 @@ namespace Boustrophedon.Area
         private CoverLine GetFirstLineFromRight(decimal workingWidth, bool reverseDirection = false)
         {
             //TODO: can be incorrect
-             int coef = 1;
+            int coef = 1;
             if (reverseDirection)
-                coef = 1;
+                coef = -1;
             CoverLine coverLine = new CoverLine();
-            coverLine.StartingCoordinates = new Coordinates(MaxX - (coef * workingWidth) / 2, GetMinY(MinX, (coef * workingWidth)));// RightDown.Y);
-            coverLine.EndingCoordinates = new Coordinates(MaxX - (coef * workingWidth) / 2, GetMaxY(MinX, (coef * workingWidth)));// RightUp.Y);
+            coverLine.StartingCoordinates = new Coordinates(MaxX + (coef * workingWidth) / 2, GetMinY(MaxX, (coef * workingWidth)));// RightDown.Y);
+            coverLine.EndingCoordinates = new Coordinates(MaxX + (coef * workingWidth) / 2, GetMaxY(MaxX, (coef * workingWidth)));// RightUp.Y);
 
             coverLine.Status = Enumerations.CoverLineStatus.reserved;
             coverLine.IsDivide = false;
@@ -542,8 +545,8 @@ namespace Boustrophedon.Area
             if (reverseDirection)
                 coef = -1;
             CoverLine coverLine = new CoverLine();
-            
-            //TODO:blocker - change Y-coordinates to the proper Y due to shape
+
+            //TODO:blocker - DONE? change Y-coordinates to the proper Y due to shape
             coverLine.StartingCoordinates = new Coordinates(MinX + (coef * workingWidth) / 2, GetMinY(MinX, (coef * workingWidth)));
             coverLine.EndingCoordinates = new Coordinates(MinX + (coef * workingWidth) / 2, GetMaxY(MinX, (coef * workingWidth)));// LeftUp.Y);
 
@@ -584,8 +587,8 @@ namespace Boustrophedon.Area
             }
 
 
-            List<Coordinates> outerCoordinatesList = GetOuterPoints(extendedCoordinatesList, Helpers.Methods.GetMin(x,x+offset), Helpers.Methods.GetMax(x, x+offset));
-            List<Coordinates> minMaxCoordinatesList = GetMinMaxCoordinates(outerCoordinatesList, x,offset);
+            List<Coordinates> outerCoordinatesList = GetOuterPoints(extendedCoordinatesList, Helpers.Methods.GetMin(x, x + offset), Helpers.Methods.GetMax(x, x + offset));
+            List<Coordinates> minMaxCoordinatesList = GetMinMaxCoordinates(outerCoordinatesList, x, offset);
 
             return minMaxCoordinatesList.OrderBy(a => a.Y).First().Y;
         }
@@ -623,7 +626,7 @@ namespace Boustrophedon.Area
             Coordinates coor;
             List<Coordinates> results = new List<Coordinates>();
 
-            for (int i = 0; i<coordinatesList.Count; i++)
+            for (int i = 0; i < coordinatesList.Count; i++)
             {
                 coor = coordinatesList[i];
                 if (coor.X < x)
@@ -632,14 +635,14 @@ namespace Boustrophedon.Area
                 }
                 else if (coor.X > x + offset)
                 {
-                    results.Add(Helpers.Methods.LinearInterpolation(coordinatesList[i-1], coordinatesList[i], x + offset));
+                    results.Add(Helpers.Methods.LinearInterpolation(coordinatesList[i - 1], coordinatesList[i], x + offset));
                 }
                 else results.Add(coor);
             }
             return results;
-}
+        }
 
-       
+
         /// <summary>
         /// Returns list of Coordinates, that are necessary to count min or max Y
         /// </summary>
@@ -655,7 +658,7 @@ namespace Boustrophedon.Area
             int coordinatesCount = growingCoordinatesList.Count;
             decimal from = -1, to = -1;
 
-            for (int i = 0; i < coordinatesCount; i++)
+            for (int i = 0; i < growingCoordinatesList.Count; i++)
             {
                 if (growingCoordinatesList[i].X <= x1)
                 {
@@ -669,7 +672,7 @@ namespace Boustrophedon.Area
             }
 
             from = from == -1 ? 0 : from;
-            to = to == -1 ? coordinateList.Count : to;
+            to = to == -1 ? growingCoordinatesList.Count - 1 : to;
             return growingCoordinatesList.GetRange((int)from, (int)(to - from + 1));
         }
 
@@ -693,7 +696,7 @@ namespace Boustrophedon.Area
 
 
         public CoverLine GetLineFromLeft(decimal width, decimal workingWidth, bool reverseDirection = false)
-         {
+        {
             //int coef = 1;
             //if (reverseDirection)
             //    coef = -1;
@@ -720,8 +723,8 @@ namespace Boustrophedon.Area
             if (reverseDirection)
                 coef = -1;
             CoverLine coverLine = new CoverLine();
-            coverLine.StartingCoordinates = new Coordinates(RightDown.X - width -(coef * workingWidth) / 2, RightDown.Y);
-            coverLine.EndingCoordinates = new Coordinates(RightUp.X - width -(coef * workingWidth) / 2, RightUp.Y);
+            coverLine.StartingCoordinates = new Coordinates(RightDown.X - width - (coef * workingWidth) / 2, RightDown.Y);
+            coverLine.EndingCoordinates = new Coordinates(RightUp.X - width - (coef * workingWidth) / 2, RightUp.Y);
 
             coverLine.Status = Enumerations.CoverLineStatus.reserved;
             coverLine.IsDivide = false;
@@ -734,18 +737,91 @@ namespace Boustrophedon.Area
 
         internal void SetAsDividedLeft(CoverLine coverLine, decimal workingWidth)
         {
-            CoordinateList[1] = new Coordinates(coverLine.StartingCoordinates.X - workingWidth / 2, CoordinateList[1].Y);
-            CoordinateList[2] = new Coordinates(coverLine.EndingCoordinates.X - workingWidth / 2, CoordinateList[2].Y);
+            DeleteAllBiggerOrEqualXCoordinates(coverLine.X - workingWidth / 2);
+
+            //CoordinateList[1] = new Coordinates(coverLine.StartingCoordinates.X - workingWidth / 2, CoordinateList[1].Y);
+            //CoordinateList[2] = new Coordinates(coverLine.EndingCoordinates.X - workingWidth / 2, CoordinateList[2].Y);
         }
 
         internal void SetAsDividedRight(CoverLine coverLine, decimal workingWidth)
         {
-            CoordinateList[0] = new Coordinates(coverLine.StartingCoordinates.X + workingWidth / 2, CoordinateList[0].Y);
-            CoordinateList[3] = new Coordinates(coverLine.EndingCoordinates.X + workingWidth / 2, CoordinateList[3].Y);
+            DeleteAllSmallerOrEqualXCoordinates(coverLine.X + workingWidth / 2);
+
+            //CoordinateList[0] = new Coordinates(coverLine.StartingCoordinates.X + workingWidth / 2, CoordinateList[0].Y);
+            //CoordinateList[3] = new Coordinates(coverLine.EndingCoordinates.X + workingWidth / 2, CoordinateList[3].Y);
         }
 
 
-        
+        private void DeleteAllSmallerOrEqualXCoordinates(decimal xCoordinate)
+        {
+            int i = 0;
+            bool down = false,
+                 up = false;
 
+
+            while (i < CoordinateListCount)
+            {
+                if (CoordinateList[i].X <= xCoordinate)
+                {
+                    if (!down && (CoordinateList[GetSafeCoordinateListIndex(i + 1)].X > xCoordinate))
+                    {
+                        CoordinateList[i] = Helpers.Methods.LinearInterpolation(CoordinateList[i], CoordinateList[GetSafeCoordinateListIndex(i + 1)], xCoordinate);
+                        down = true;
+                        i++;
+                    }
+                    else if (!up)
+                    {
+                        CoordinateList[i] = Helpers.Methods.LinearInterpolation(CoordinateList[i], CoordinateList[GetSafeCoordinateListIndex(i - 1)], xCoordinate);
+                        up = true;
+                        i++;
+                    }
+                    else
+                    {
+                        CoordinateList.RemoveAt(i);
+                        //cant do i++ cause just deleted item
+                    }
+                }
+                else
+                {
+                    i++;
+                }
+            }
+        }
+
+        private void DeleteAllBiggerOrEqualXCoordinates(decimal xCoordinate)
+        {
+            int i = 0;
+            bool down = false,
+                 up = false;
+
+
+            while (i < CoordinateListCount)
+            {
+                if (CoordinateList[i].X >= xCoordinate)
+                {
+                    if (!down)
+                    {
+                        CoordinateList.Insert(i, Helpers.Methods.LinearInterpolation(CoordinateList[i], CoordinateList[GetSafeCoordinateListIndex(i - 1)], xCoordinate));
+                        down = true;
+                        i++;
+                    }
+                    else if (!up && (CoordinateList[GetSafeCoordinateListIndex(i + 1)].X < xCoordinate))
+                    {
+                        CoordinateList[i] = Helpers.Methods.LinearInterpolation(CoordinateList[i], CoordinateList[GetSafeCoordinateListIndex(i + 1)], xCoordinate);
+                        up = true;
+                        i++;
+                    }
+                    else
+                    {
+                        CoordinateList.RemoveAt(i);
+                        //cant do i++ cause just deleted item
+                    }
+                }
+                else
+                {
+                    i++;
+                }
+            }
+        }
     }
 }
