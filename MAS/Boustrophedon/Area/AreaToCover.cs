@@ -48,7 +48,8 @@ namespace Boustrophedon.Area
 
         public int GetSafeCoordinateListIndex(int index)
         {
-            return (index + CoordinateListCount) % CoordinateListCount;
+            var a = (index + CoordinateListCount) % CoordinateListCount;
+            return a;
         }
 
         internal string GetLastCoverLine(Enumerations.VerticalPosition verticalPosition)
@@ -575,17 +576,21 @@ namespace Boustrophedon.Area
             extendedCoordinatesList = tempArray.ToList();
 
             Coordinates previousCoordinate = CoordinateList.First();
-            for (int i = CoordinateList.Count - 1; i > 0; i++)
+            for (int i = CoordinateList.Count - 1; i > 0; i--)
             {
                 if (CoordinateList[i].X < previousCoordinate.X)
                 {
                     extendedCoordinatesList.Insert(0, new Coordinates(CoordinateList[i].X, CoordinateList[i].Y));
-                    previousCoordinate = CoordinateList[i];
+                    previousCoordinate = CoordinateList.First();
                 }
                 else
                     break;
             }
 
+            if (345 > x && x > 344)
+            {
+                tempArray = null;
+            }
 
             List<Coordinates> outerCoordinatesList = GetOuterPoints(extendedCoordinatesList, Helpers.Methods.GetMin(x, x + offset), Helpers.Methods.GetMax(x, x + offset));
             List<Coordinates> minMaxCoordinatesList = GetMinMaxCoordinates(outerCoordinatesList, x, offset);
@@ -631,11 +636,15 @@ namespace Boustrophedon.Area
                 coor = coordinatesList[i];
                 if (coor.X < x)
                 {
-                    results.Add(Helpers.Methods.LinearInterpolation(coordinatesList[i], coordinatesList[i + 1], x));
+                    if (coordinatesList[GetSafeCoordinateListIndex(i + 1)].X > x)
+                    {
+                        results.Add(Helpers.Methods.LinearInterpolation(coordinatesList[i], coordinatesList[i + 1], x));
+                    }
                 }
                 else if (coor.X > x + offset)
                 {
-                    results.Add(Helpers.Methods.LinearInterpolation(coordinatesList[i - 1], coordinatesList[i], x + offset));
+                    results.Add(Helpers.Methods.LinearInterpolation(coordinatesList[(i - 1) % CoordinateList.Count], coordinatesList[i], x + offset));
+                    break;
                 }
                 else results.Add(coor);
             }
@@ -665,9 +674,10 @@ namespace Boustrophedon.Area
                     from = i;
                 }
 
-                if (to == -1 && coordinateList[i].X >= x2 && from != -1)
+                if (to == -1 && growingCoordinatesList[i].X >= x2 && from != -1)
                 {
                     to = i;
+                    break;
                 }
             }
 
@@ -687,6 +697,8 @@ namespace Boustrophedon.Area
                 {
                     if (resultList.Last().X <= coor.X)
                         resultList.Add(coor);
+                    else if (resultList.Count == 1)
+                        resultList[0] = coor;
                     else
                         break;
                 }
@@ -758,18 +770,21 @@ namespace Boustrophedon.Area
             bool down = false,
                  up = false;
 
+            //xCoordinate == (decimal)
+            if (337 < xCoordinate && 338>xCoordinate)
+                down = false;
 
             while (i < CoordinateListCount)
             {
                 if (CoordinateList[i].X <= xCoordinate)
                 {
-                    if (!down && (CoordinateList[GetSafeCoordinateListIndex(i + 1)].X > xCoordinate))
+                    if (!down && (CoordinateList[GetSafeCoordinateListIndex(i + 1)].X > xCoordinate || MaxX < xCoordinate))
                     {
                         CoordinateList[i] = Helpers.Methods.LinearInterpolation(CoordinateList[i], CoordinateList[GetSafeCoordinateListIndex(i + 1)], xCoordinate);
                         down = true;
                         i++;
                     }
-                    else if (!up)
+                    else if (!up && down)
                     {
                         CoordinateList[i] = Helpers.Methods.LinearInterpolation(CoordinateList[i], CoordinateList[GetSafeCoordinateListIndex(i - 1)], xCoordinate);
                         up = true;

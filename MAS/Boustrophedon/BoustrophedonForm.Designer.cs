@@ -31,16 +31,18 @@
             this.tcBottom = new System.Windows.Forms.TabControl();
             this.tbLog = new System.Windows.Forms.TabPage();
             this.rtbLog = new System.Windows.Forms.RichTextBox();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.rtbMachineStatistics = new System.Windows.Forms.TabPage();
             this.btStart = new System.Windows.Forms.Button();
+            this.rtbMachineStatisticsText = new System.Windows.Forms.RichTextBox();
             this.tcBottom.SuspendLayout();
             this.tbLog.SuspendLayout();
+            this.rtbMachineStatistics.SuspendLayout();
             this.SuspendLayout();
             // 
             // tcBottom
             // 
             this.tcBottom.Controls.Add(this.tbLog);
-            this.tcBottom.Controls.Add(this.tabPage2);
+            this.tcBottom.Controls.Add(this.rtbMachineStatistics);
             this.tcBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.tcBottom.Location = new System.Drawing.Point(0, 41);
             this.tcBottom.Name = "tcBottom";
@@ -68,15 +70,16 @@
             this.rtbLog.TabIndex = 0;
             this.rtbLog.Text = "";
             // 
-            // tabPage2
+            // rtbMachineStatistics
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 25);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1018, 253);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.rtbMachineStatistics.Controls.Add(this.rtbMachineStatisticsText);
+            this.rtbMachineStatistics.Location = new System.Drawing.Point(4, 25);
+            this.rtbMachineStatistics.Name = "rtbMachineStatistics";
+            this.rtbMachineStatistics.Padding = new System.Windows.Forms.Padding(3);
+            this.rtbMachineStatistics.Size = new System.Drawing.Size(1410, 759);
+            this.rtbMachineStatistics.TabIndex = 1;
+            this.rtbMachineStatistics.Text = "Machines Statistics";
+            this.rtbMachineStatistics.UseVisualStyleBackColor = true;
             // 
             // btStart
             // 
@@ -87,6 +90,15 @@
             this.btStart.Text = "Start";
             this.btStart.UseVisualStyleBackColor = true;
             this.btStart.Click += new System.EventHandler(this.btStart_Click);
+            // 
+            // rtbMachineStatisticsText
+            // 
+            this.rtbMachineStatisticsText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbMachineStatisticsText.Location = new System.Drawing.Point(3, 3);
+            this.rtbMachineStatisticsText.Name = "rtbMachineStatisticsText";
+            this.rtbMachineStatisticsText.Size = new System.Drawing.Size(1404, 753);
+            this.rtbMachineStatisticsText.TabIndex = 0;
+            this.rtbMachineStatisticsText.Text = "";
             // 
             // Boustrophedon
             // 
@@ -99,6 +111,7 @@
             this.Text = "Boustrophedon_MAS";
             this.tcBottom.ResumeLayout(false);
             this.tbLog.ResumeLayout(false);
+            this.rtbMachineStatistics.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -108,8 +121,9 @@
         private System.Windows.Forms.TabControl tcBottom;
         private System.Windows.Forms.TabPage tbLog;
         private System.Windows.Forms.RichTextBox rtbLog;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage rtbMachineStatistics;
         private System.Windows.Forms.Button btStart;
+        private System.Windows.Forms.RichTextBox rtbMachineStatisticsText;
     }
 }
 

@@ -141,7 +141,7 @@ namespace Boustrophedon.WorldToCover
         /// </summary>
         public static string StartCover()
         {
-            previousUncovered = AreasToCover[0].Width;
+            previousUncovered = AreasToCover.First().Width;
             StringBuilder result = new StringBuilder();
             result.AppendLine(FirstCoverLines());
 
@@ -151,6 +151,9 @@ namespace Boustrophedon.WorldToCover
                 var coverLine = GetCoverLineByID(coverLineID);
                 MachineObject machine = Machines.GetMachineByID(coverLine.MachineID);
                 AreaToCover area = AreasToCover.Count() > 0 ? GetAreaByID(coverLine.AreaToCoverID) : null;
+
+                machine.AddStatistics();
+
 
                 decimal totalUncovered = 0;
                 foreach (var area2cover in AreasToCover)

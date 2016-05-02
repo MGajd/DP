@@ -16,7 +16,20 @@ namespace Boustrophedon.Machine
 
         public DateTime EndsAt;
 
-        public string ActualCoverLineID;
+        public string ActualCoverLineID
+        {
+            get { return _actualCoverLineID; }
+            set
+            {
+                if (value != _actualCoverLineID)
+                {
+                    _previousCoverLineID = _actualCoverLineID;
+                    _actualCoverLineID = value;
+                }
+            }
+        }
+
+
         public string NextCoverLineID;
 
         public string MachineID;
@@ -29,6 +42,8 @@ namespace Boustrophedon.Machine
         private decimal _workingWidth;
         private decimal _coverSpeed;
         private decimal _turningRadius;
+        private string _actualCoverLineID;
+        private string _previousCoverLineID;
 
         /// <summary>
         /// Distance that can be traveled by machine due to energy source (i.e. fuel).
@@ -49,6 +64,11 @@ namespace Boustrophedon.Machine
         /// Domain specific limitations.
         /// </summary>
         private List<object> _domainLimitations;
+
+
+        public decimal WorkingDistance { get; private set; }
+
+        public decimal OtherDistance { get; private set; }
 
         public decimal WorkingWidth
         {

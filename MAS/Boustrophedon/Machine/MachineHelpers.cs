@@ -11,6 +11,7 @@ namespace Boustrophedon.Machine
 {
     public partial class MachineObject
     {
+
         private decimal CalculateWidthToDivide(List<string> machinesIDs)
         {
             List<MachineObject> machines = Machines.GetMachines(machinesIDs);
@@ -43,6 +44,17 @@ namespace Boustrophedon.Machine
             return area1ID;      
         }
 
+        internal void AddStatistics()
+        {
+            CoverLine actualCL = WorldToCover.World.GetCoverLineByID(ActualCoverLineID);
+            WorkingDistance += Helpers.Methods.GetDistance(actualCL.StartingCoordinates, actualCL.EndingCoordinates);
 
+            if (!string.IsNullOrEmpty(_previousCoverLineID))
+            {
+                CoverLine previousCL = WorldToCover.World.GetCoverLineByID(_previousCoverLineID);
+                OtherDistance += Helpers.Methods.GetDistance(actualCL.StartingCoordinates, previousCL.EndingCoordinates);
+                OtherDistance +=  (decimal)((Math.PI * (double)TurningRadius)/2) - TurningRadius;
+            }
+        }
     }
 }
