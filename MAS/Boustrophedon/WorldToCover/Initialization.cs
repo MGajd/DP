@@ -15,20 +15,20 @@ namespace Boustrophedon.WorldToCover
 
 
 
-            MachineObject machine = new MachineObject();
-            machine.CoverSpeed = 1;
-            machine.Position = new Coordinates(0, 0);
-            machine.TransportSpeed = (decimal)3.33;
-            machine.TurningRadius = 10;
-            machine.WorkingWidth = (decimal)7.4;
+            //MachineObject machine = new MachineObject();
+            //machine.CoverSpeed = 1;
+            //machine.Position = new Coordinates(0, 0);
+            //machine.TransportSpeed = (decimal)3.33;
+            //machine.TurningRadius = 10;
+            //machine.WorkingWidth = (decimal)7.4;
 
 
-            machine = new MachineObject();
-            machine.CoverSpeed = 1;
-            machine.Position = new Coordinates(0, 0);
-            machine.TransportSpeed = (decimal)3.33;
-            machine.TurningRadius = 10;
-            machine.WorkingWidth = (decimal)7.4;
+            //machine = new MachineObject();
+            //machine.CoverSpeed = 1;
+            //machine.Position = new Coordinates(0, 0);
+            //machine.TransportSpeed = (decimal)3.33;
+            //machine.TurningRadius = 10;
+            //machine.WorkingWidth = (decimal)7.4;
 
 
             //Machines.AddMachineToList(machine);

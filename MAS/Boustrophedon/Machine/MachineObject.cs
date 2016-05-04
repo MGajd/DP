@@ -45,6 +45,8 @@ namespace Boustrophedon.Machine
         private string _actualCoverLineID;
         private string _previousCoverLineID;
 
+        private Enumerations.MachineType _type;
+
         /// <summary>
         /// Distance that can be traveled by machine due to energy source (i.e. fuel).
         /// </summary>
@@ -69,6 +71,8 @@ namespace Boustrophedon.Machine
         public decimal WorkingDistance { get; private set; }
 
         public decimal OtherDistance { get; private set; }
+
+        public Enumerations.MachineType Type { get; set; }
 
         public decimal WorkingWidth
         {
@@ -392,7 +396,8 @@ namespace Boustrophedon.Machine
         {
             //first gets left or right to know whether check AreaToCover from left or right
 
-
+            if (World.AreasToCover == null)
+                return Enumerations.MachinePositionToCoverArea.leftDown;
 
             if (string.IsNullOrEmpty(ActualCoverLineID))
             {

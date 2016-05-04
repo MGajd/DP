@@ -77,9 +77,15 @@ namespace Boustrophedon
             down,
         }
 
-        public enum CoverLinePosition {
+        public enum CoverLinePosition
+        {
             inner = 1,
             outer = 2,
+        }
+        public enum MachineType
+        {
+            primary = 1,
+            secondary = 2,
         }
     }
 }

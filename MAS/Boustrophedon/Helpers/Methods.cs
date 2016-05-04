@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Boustrophedon.Helpers
 {
@@ -52,6 +53,33 @@ namespace Boustrophedon.Helpers
         {
             return x > y ? x : y;
         }
+
+        internal static decimal GetMetersPerSecond(decimal value, string unit)
+        {
+            switch (unit)
+            {
+                case "km/h":
+                    return value * (decimal)0.27777777;
+
+                default: return value;
+            }
+
+        }
+
+        internal static decimal GetMeters(decimal value, string unit)
+        {
+            switch (unit)
+            {
+                case "km":
+                    return value * 1000;
+
+                case "mm":
+                    return value / 10;
+
+                default: return value;
+            }
+        }
+
         internal static decimal GetMin(decimal x, decimal y)
         {
             return x < y ? x : y;
